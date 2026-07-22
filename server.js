@@ -22,6 +22,23 @@ app.use(session({
 }));
 
 // ========== ROTAS ==========
+// Adicionando uma camada de segurança (Senha para entrar no site)
+app.use((req, res, next) => {
+  // Pega o usuário e senha do .env, ou usa 'amor' e '1234' como padrão
+  const user = process.env.SITE_USER || 'amor';
+  const pass = process.env.SITE_PASSWORD || '1234';
+
+  const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+  const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+
+  if (login && password && login === user && password === pass) {
+    return next();
+  }
+
+  res.set('WWW-Authenticate', 'Basic realm="Nosso Lugar Secreto"');
+  res.status(401).send('Acesso Negado. Este é um local privado! ❤️');
+});
+
 const rotasPrincipal = require('./routes/principal');
 const rotasCartas = require('./routes/cartas');
 
