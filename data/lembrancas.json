@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "titulo": "Caixa de Som na Escola",
+    "data": "2025-05-15",
+    "dataFormatada": "15 de Maio, 2025",
+    "descricao": "O dia que levei a caixa de som para a escola e te vi pela primeira vez de pertinho. Achei você linda e inventei o reforço de matemática só pra ficar perto de você.",
+    "icone": "🎵",
+    "tags": "escola,começo,fofo",
+    "imagem": "",
+    "favorito": true,
+    "local": "IFC"
+  },
+  {
+    "id": 2,
+    "titulo": "Primeiro Selinho",
+    "data": "2025-06-11",
+    "dataFormatada": "11 de Junho, 2025",
+    "descricao": "Você ficou na escola à tarde para o conselho e aconteceu. Nosso primeiro selinho. Ainda me lembro da sensação.",
+    "icone": "💋",
+    "tags": "beijo,especial,IFC",
+    "imagem": "",
+    "favorito": true,
+    "local": "IFC"
+  },
+  {
+    "id": 3,
+    "titulo": "Festa Junina",
+    "data": "2025-07-05",
+    "dataFormatada": "Madrugada de 06 de Julho, 2025",
+    "descricao": "Você insistiu tanto para eu ir na festa junina. E eu fui. E foi a melhor decisão que já tomei. Ficamos pela primeira vez naquela madrugada.",
+    "icone": "🎆",
+    "tags": "festa,especial,noite",
+    "imagem": "",
+    "favorito": true,
+    "local": "Festa Junina"
+  },
+  {
+    "id": 4,
+    "titulo": "Hambúrguer Juntos",
+    "data": "2025-07-10",
+    "dataFormatada": "Julho de 2025",
+    "descricao": "Primeira vez que você veio aqui em casa. Comemos hambúrguer juntos e foi tudo muito simples e tudo muito gostoso ao mesmo tempo.",
+    "icone": "🍔",
+    "tags": "casa,comida,fofo",
+    "imagem": "",
+    "favorito": false,
+    "local": "Minha casa"
+  },
+  {
+    "id": 5,
+    "titulo": "Primeiro 'Eu Te Amo'",
+    "data": "2025-08-15",
+    "dataFormatada": "15 de Agosto, 2025",
+    "descricao": "Foi no banheiro NB do IFC. Eu falei primeiro. Não planejei, simplesmente saiu. E foi a coisa mais verdadeira que já disse.",
+    "icone": "❤️",
+    "tags": "amor,especial,IFC",
+    "imagem": "",
+    "favorito": true,
+    "local": "IFC"
+  },
+  {
+    "id": 6,
+    "titulo": "Casa do Neto",
+    "data": "2025-09-07",
+    "dataFormatada": "07 de Setembro, 2025",
+    "descricao": "Um dia diferente, na casa do Neto. Mais uma memória guardada com carinho no nosso baú de histórias.",
+    "icone": "🏠",
+    "tags": "amigos,dia-especial",
+    "imagem": "",
+    "favorito": false,
+    "local": "Casa do Neto"
+  },
+  {
+    "id": 7,
+    "titulo": "Pedido de Namoro",
+    "data": "2026-01-16",
+    "dataFormatada": "16 de Janeiro, 2026",
+    "descricao": "Aqui em casa, te pedi em namoro. Você disse sim e a partir daquele momento tudo ficou ainda mais bonito.",
+    "icone": "💍",
+    "tags": "namoro,especial,amor",
+    "imagem": "",
+    "favorito": true,
+    "local": "Minha casa"
+  }
+]

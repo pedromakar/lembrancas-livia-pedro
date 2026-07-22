@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "nome": "IFC — Campus Sombrio",
+    "descricao": "Onde tudo começou. A escola que nos uniu. Cada corredor, cada sala e cada cantinho guarda uma memória nossa.",
+    "emoji": "🏫",
+    "lat": -29.102066,
+    "lng": -49.638744,
+    "data": "Maio de 2025",
+    "cor": "#5a1c35",
+    "foto": ""
+  },
+  {
+    "id": 2,
+    "nome": "Minha Casa",
+    "descricao": "O lugar onde você veio pela primeira vez. Onde a gente comeu hambúrguer e onde eu te pedi em namoro no dia 16 de Janeiro.",
+    "emoji": "🏠",
+    "lat": -29.1105,
+    "lng": -49.6265,
+    "data": "Julho de 2025 / Janeiro de 2026",
+    "cor": "#C9956C",
+    "foto": ""
+  },
+  {
+    "id": 3,
+    "nome": "Casa do Neto",
+    "descricao": "Um dia especial em setembro. Um lugar que também faz parte da nossa história.",
+    "emoji": "🤝",
+    "lat": -29.1333,
+    "lng": -49.6000,
+    "data": "Setembro de 2025",
+    "cor": "#A35F74",
+    "foto": ""
+  }
+]

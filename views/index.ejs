@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Nosso lugar especial — <%= config.casal.nome1 %> & <%= config.casal.nome2 %>">
+    <title><%= title %> — <%= config.casal.nome1 %> & <%= config.casal.nome2 %></title>
+
+    <!-- Fontes Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Design System -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     SPLASH SCREEN (primeira visita)
+     ═══════════════════════════════════════ -->
+<div id="splash-screen">
+    <div class="splash-logo">Nosso Lugar</div>
+    <div class="splash-heart">❤️</div>
+    <div class="splash-line"></div>
+    <div class="splash-sub"><%= config.casal.nome1 %> & <%= config.casal.nome2 %></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SIDEBAR
+     ═══════════════════════════════════════ -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div>
+            <div class="sidebar-title">Nosso Lugar</div>
+            <div class="sidebar-sub"><%= config.casal.nome1 %> & <%= config.casal.nome2 %></div>
+        </div>
+        <button class="btn-close btn-close-white" id="sidebarClose" aria-label="Fechar menu"></button>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li>
+            <a href="/" class="active">
+                <span class="menu-icon">🏠</span> Início
+            </a>
+        </li>
+        <li>
+            <a href="/historia">
+                <span class="menu-icon">❤️</span> Nossa História
+            </a>
+        </li>
+        <li>
+            <a href="/lembrancas">
+                <span class="menu-icon">📸</span> Lembranças
+            </a>
+        </li>
+        <li>
+            <a href="/cartas">
+                <span class="menu-icon">💌</span> Cartas
+            </a>
+        </li>
+        <li>
+            <a href="/playlist">
+                <span class="menu-icon">🎵</span> Playlist
+            </a>
+        </li>
+        <li>
+            <a href="/lugares">
+                <span class="menu-icon">🗺️</span> Lugares
+            </a>
+        </li>
+        <li>
+            <a href="/estatisticas">
+                <span class="menu-icon">📊</span> Estatísticas
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+     ═══════════════════════════════════════ -->
+<nav class="navbar navbar-expand-lg navbar-dark" id="mainNav">
+    <div class="container-fluid px-4">
+        <button class="btn btn-link text-white p-2 me-2" id="sidebarToggle" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a class="navbar-brand" href="/">
+            ❤️ Nosso Lugar
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link active" href="/"><i class="fas fa-home me-1"></i>Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="/lembrancas"><i class="fas fa-images me-1"></i>Lembranças</a></li>
+                <li class="nav-item"><a class="nav-link" href="/cartas"><i class="fas fa-envelope me-1"></i>Cartas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/playlist"><i class="fas fa-music me-1"></i>Playlist</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     HERO — SEÇÃO PRINCIPAL
+     ═══════════════════════════════════════ -->
+<section class="hero-home" id="hero">
+
+    <!-- Foto ou placeholder -->
+    <% if (config.casal.fotoHome) { %>
+        <img src="<%= config.casal.fotoHome %>" alt="<%= config.casal.nome1 %> & <%= config.casal.nome2 %>"
+             class="hero-couple-photo animate-fadeInUp">
+    <% } else { %>
+        <div class="hero-couple-photo-placeholder animate-fadeInUp delay-1">💑</div>
+    <% } %>
+
+    <!-- Títulos -->
+    <h1 class="hero-title animate-fadeInUp delay-2">Nosso Lugar</h1>
+    <p class="hero-names animate-fadeInUp delay-3">
+        <%= config.casal.nome1 %> &amp; <%= config.casal.nome2 %>
+    </p>
+
+    <div class="hero-divider animate-fadeInUp delay-3"></div>
+
+    <!-- CONTADOR PREMIUM -->
+    <div class="contador-container animate-fadeInUp delay-4" id="contador">
+        <div class="contador-item">
+            <span class="contador-numero" id="contador-anos">00</span>
+            <span class="contador-label">Anos</span>
+        </div>
+        <span class="contador-separator">·</span>
+        <div class="contador-item">
+            <span class="contador-numero" id="contador-meses">00</span>
+            <span class="contador-label">Meses</span>
+        </div>
+        <span class="contador-separator">·</span>
+        <div class="contador-item">
+            <span class="contador-numero" id="contador-dias">00</span>
+            <span class="contador-label">Dias</span>
+        </div>
+        <span class="contador-separator">·</span>
+        <div class="contador-item">
+            <span class="contador-numero" id="contador-horas">00</span>
+            <span class="contador-label">Horas</span>
+        </div>
+        <span class="contador-separator">·</span>
+        <div class="contador-item">
+            <span class="contador-numero" id="contador-minutos">00</span>
+            <span class="contador-label">Min</span>
+        </div>
+        <span class="contador-separator">·</span>
+        <div class="contador-item">
+            <span class="contador-numero" id="contador-segundos">00</span>
+            <span class="contador-label">Seg</span>
+        </div>
+    </div>
+
+    <!-- Botão Surpreenda-me -->
+    <a href="/lembrancas" id="btn-surpreenda" class="btn-surpresa animate-fadeInUp delay-5" style="margin-top: 1rem;">
+        <span>✨</span> Me surpreenda
+    </a>
+
+    <!-- Seta de scroll -->
+    <div class="animate-fadeInUp delay-6" style="margin-top: 3rem; opacity: 0.4; animation: float 2.5s ease-in-out infinite;">
+        <i class="fas fa-chevron-down" style="font-size: 1.3rem; color: var(--bordo);"></i>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FRASE DO DIA
+     ═══════════════════════════════════════ -->
+<div class="container" style="max-width: 700px; padding: 0 1rem 1rem;">
+    <div class="frase-do-dia reveal">
+        <blockquote id="frase-do-dia-text">"Em você encontrei minha casa, meu lar e minha paz."</blockquote>
+        <cite id="frase-do-dia-autor">💕</cite>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     DESTAQUES — ATALHOS PARA SEÇÕES
+     ═══════════════════════════════════════ -->
+<div class="home-destaques">
+
+    <a href="/historia" class="destaque-card reveal delay-1">
+        <span class="destaque-icon">❤️</span>
+        <div class="destaque-titulo">Nossa História</div>
+        <div class="destaque-desc">Desde o começo até hoje. Cada capítulo da nossa vida juntos.</div>
+    </a>
+
+    <a href="/lembrancas" class="destaque-card reveal delay-2">
+        <span class="destaque-icon">📸</span>
+        <div class="destaque-titulo">Lembranças</div>
+        <div class="destaque-desc">Fotos, momentos e memórias fofas que a gente viveu.</div>
+    </a>
+
+    <a href="/cartas" class="destaque-card reveal delay-3">
+        <span class="destaque-icon">💌</span>
+        <div class="destaque-titulo">Cartas</div>
+        <div class="destaque-desc">Palavras que ficam. Mensagens do coração para você.</div>
+    </a>
+
+    <a href="/playlist" class="destaque-card reveal delay-4">
+        <span class="destaque-icon">🎵</span>
+        <div class="destaque-titulo">Playlist</div>
+        <div class="destaque-desc">As músicas que marcaram a trilha sonora da nossa história.</div>
+    </a>
+
+    <a href="/lugares" class="destaque-card reveal delay-5">
+        <span class="destaque-icon">🗺️</span>
+        <div class="destaque-titulo">Lugares</div>
+        <div class="destaque-desc">Os locais especiais que guardam as nossas memórias.</div>
+    </a>
+
+    <a href="/estatisticas" class="destaque-card reveal delay-6">
+        <span class="destaque-icon">📊</span>
+        <div class="destaque-titulo">Estatísticas</div>
+        <div class="destaque-desc">Números que contam quanto a nossa história cresceu.</div>
+    </a>
+
+</div>
+
+<!-- Divisor -->
+<div class="divider-premium reveal" style="max-width: 100%; margin: 1rem auto 4rem;"></div>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════ -->
+<footer>
+    <p>Feito com <strong>❤️</strong> para <strong><%= config.casal.nome2 %></strong></p>
+    <p style="margin-top: 0.5rem; opacity: 0.4; font-size: 0.75rem; letter-spacing: 0.1em;">
+        &copy; <%= new Date().getFullYear() %> Nosso Lugar
+    </p>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     MODAL ENVELOPE — CELEBRAÇÃO
+     ═══════════════════════════════════════ -->
+<div class="modal-carta-overlay" id="modalCarta">
+    <div class="carta-container" id="cartaContainer">
+        <!-- Envelope Fechado -->
+        <div class="carta-envelope" id="cartaEnvelope">
+            <div class="carta-selo">❤️</div>
+            <div class="carta-instrucao" style="font-size: 1rem; margin-top: 1rem;">
+                Para o amor da minha vida...<br>
+                <span style="font-size: 0.85rem; opacity: 0.7;">(toque para abrir)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carta Aberta (fora do container para animação de scale) -->
+    <div class="carta-aberta-conteudo" id="cartaAberta">
+        <div class="carta-texto-cabecalho">Feliz 6 Meses, meu amor! 💖</div>
+        <div class="carta-texto-corpo">
+            Meu bem,<br><br>
+            Hoje celebramos 6 meses desde o dia em que decidimos caminhar lado a lado.
+            Cada segundo, minuto e dia ao seu lado tem sido um presente que eu não merecia.
+            Você torna a minha vida muito mais bonita, cheia de sentido e transbordando carinho.<br><br>
+            Preparei este espaço digital com todo o meu amor para guardarmos as nossas cartas,
+            as nossas músicas e as nossas lembranças mais fofas.
+            Que este seja apenas o começo da nossa linda história eterna.<br><br>
+            <strong>Eu te amo daqui até o infinito.</strong> 💕
+        </div>
+        <button class="btn-surpresa pulse-glow" id="btnFecharCarta" style="border: none; cursor: pointer;">
+            Entrar no Nosso Lugar &nbsp;→
+        </button>
+    </div>
+</div>
+
+<!-- ─── SCRIPTS ─── -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/animations.js"></script>
+<script>
+    // ── Iniciar contador premium ──────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.NL && window.NL.initContadorPremium) {
+            window.NL.initContadorPremium('<%= config.casal.dataInicio %>');
+        }
+        if (window.NL && window.NL.initFraseDoDia) {
+            window.NL.initFraseDoDia(<%- JSON.stringify(config.frases) %>);
+        }
+    });
+
+    // ── Sidebar ───────────────────────────────────────────────────────
+    const sidebar        = document.getElementById('sidebar');
+    const sidebarToggle  = document.getElementById('sidebarToggle');
+    const sidebarClose   = document.getElementById('sidebarClose');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function openSidebar()  { sidebar.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeSidebar() { sidebar.classList.remove('active'); sidebarOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+
+    sidebarToggle.addEventListener('click', openSidebar);
+    sidebarClose.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    document.querySelectorAll('.sidebar-menu a').forEach(l => l.addEventListener('click', closeSidebar));
+
+    // ── Modal do Envelope (6 meses) ───────────────────────────────────
+    <% if (config.configuracoes && config.configuracoes.modoCelebracaoAtivo) { %>
+    const modalCarta    = document.getElementById('modalCarta');
+    const cartaEnvelope = document.getElementById('cartaEnvelope');
+    const cartaAberta   = document.getElementById('cartaAberta');
+    const btnFCarta     = document.getElementById('btnFecharCarta');
+
+    // Só exibe na primeira visita da sessão
+    if (!sessionStorage.getItem('nl_modal_visto')) {
+        modalCarta.style.display = 'flex';
+    } else {
+        modalCarta.style.display = 'none';
+    }
+
+    cartaEnvelope.addEventListener('click', () => {
+        cartaEnvelope.style.transition = 'all 0.5s ease';
+        cartaEnvelope.style.transform = 'scale(0.8) rotateY(90deg)';
+        cartaEnvelope.style.opacity = '0';
+        setTimeout(() => {
+            cartaEnvelope.style.display = 'none';
+            cartaAberta.classList.add('active');
+            if (window.lancarConfetesComemorativos) {
+                window.lancarConfetesComemorativos();
+                setTimeout(window.lancarConfetesComemorativos, 1500);
+            }
+        }, 500);
+    });
+
+    function fecharModalCarta() {
+        modalCarta.classList.add('hidden');
+        sessionStorage.setItem('nl_modal_visto', 'true');
+        setTimeout(() => { modalCarta.style.display = 'none'; }, 500);
+    }
+
+    btnFCarta.addEventListener('click', fecharModalCarta);
+    modalCarta.addEventListener('click', (e) => {
+        if (e.target === modalCarta) fecharModalCarta();
+    });
+    <% } else { %>
+    document.getElementById('modalCarta').style.display = 'none';
+    <% } %>
+</script>
+
+</body>
+</html>

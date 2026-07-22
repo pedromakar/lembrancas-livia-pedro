@@ -1,0 +1,14 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.wordWrap": "on",
+  "editor.tabSize": 2,
+  "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+  "[ejs]": {
+    "editor.defaultFormatter": "WallabyJs.quokka-vscode"
+  },
+  "emmet.includeLanguages": {
+    "ejs": "html"
+  }
+}

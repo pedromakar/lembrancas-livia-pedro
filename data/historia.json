@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "data": "2025-05-15",
+    "dataFormatada": "15 de Maio, 2025",
+    "titulo": "O Começo de Tudo",
+    "descricao": "Foi no dia em que levei uma caixa de som para a escola. Eu vi você de longe e achei você linda. Inventei um motivo e te convidei para o reforço de matemática. Nem eu sabia que aquele dia ia mudar tudo.",
+    "emoji": "🎵",
+    "cor": "bordo",
+    "foto": "",
+    "destaque": true
+  },
+  {
+    "id": 2,
+    "data": "2025-05-16",
+    "dataFormatada": "Depois disso...",
+    "titulo": "Conversas Todo Dia",
+    "descricao": "Começamos a conversar todos os dias. Mensagens que não tinham hora para acabar. Cada conversa era melhor que a anterior. Sem perceber, você já fazia parte do meu dia.",
+    "emoji": "💬",
+    "cor": "rose",
+    "foto": "",
+    "destaque": false
+  },
+  {
+    "id": 3,
+    "data": "2025-06-11",
+    "dataFormatada": "11 de Junho, 2025",
+    "titulo": "Primeiro Selinho",
+    "descricao": "Você ficou na escola à tarde por causa do conselho. E aconteceu. Nosso primeiro selinho. Eu nem conseguia acreditar.",
+    "emoji": "💋",
+    "cor": "bordo",
+    "foto": "",
+    "destaque": true
+  },
+  {
+    "id": 4,
+    "data": "2025-07-05",
+    "dataFormatada": "Madrugada de 06 de Julho, 2025",
+    "titulo": "Primeira Ficada",
+    "descricao": "Você insistiu muito para eu ir na festa junina. Eu fui. E na madrugada do dia 6, ficamos pela primeira vez. Foi uma noite que eu nunca vou esquecer.",
+    "emoji": "🎆",
+    "cor": "rose",
+    "foto": "",
+    "destaque": true
+  },
+  {
+    "id": 5,
+    "data": "2025-07-07",
+    "dataFormatada": "Depois disso...",
+    "titulo": "Todo Dia no IFC",
+    "descricao": "Depois daquela noite, a gente começou a ficar muito juntos no IFC. Cada intervalo, cada cantinho da escola virou memória nossa.",
+    "emoji": "🏫",
+    "cor": "bordo",
+    "foto": "",
+    "destaque": false
+  },
+  {
+    "id": 6,
+    "data": "2025-07-10",
+    "dataFormatada": "Uma tarde especial",
+    "titulo": "Primeira Vez Aqui em Casa",
+    "descricao": "Você veio aqui em casa pela primeira vez. A gente comeu hambúrguer juntos. Parecia algo tão simples, mas foi tão bom.",
+    "emoji": "🍔",
+    "cor": "rose",
+    "foto": "",
+    "destaque": false
+  },
+  {
+    "id": 7,
+    "data": "2025-08-15",
+    "dataFormatada": "15 de Agosto, 2025",
+    "titulo": "Primeiro 'Eu Te Amo'",
+    "descricao": "Foi no banheiro NB do IFC. Eu falei primeiro. Não planejei, simplesmente saiu. E foi a coisa mais verdadeira que já disse na vida.",
+    "emoji": "❤️",
+    "cor": "bordo",
+    "foto": "",
+    "destaque": true
+  },
+  {
+    "id": 8,
+    "data": "2025-09-07",
+    "dataFormatada": "07 de Setembro, 2025",
+    "titulo": "Casa do Neto",
+    "descricao": "Um dia especial na casa do Neto. Mais uma memória nossa que fica guardada no coração.",
+    "emoji": "🏠",
+    "cor": "rose",
+    "foto": "",
+    "destaque": false
+  },
+  {
+    "id": 9,
+    "data": "2025-09-28",
+    "dataFormatada": "28 de Setembro, 2025",
+    "titulo": "Um Momento Muito Especial",
+    "descricao": "Teve um momento nesse dia que foi muito importante para os dois. Um passo que aproximou ainda mais a gente. Algo só nosso.",
+    "emoji": "🌙",
+    "cor": "bordo",
+    "foto": "",
+    "destaque": true
+  },
+  {
+    "id": 10,
+    "data": "2026-01-16",
+    "dataFormatada": "16 de Janeiro, 2026",
+    "titulo": "Pedido de Namoro",
+    "descricao": "Foi aqui em casa. Eu te pedi em namoro. E você disse sim. A data que mudou tudo e que marca o começo oficial do nosso relacionamento. O dia que eu mais queria que chegasse.",
+    "emoji": "💍",
+    "cor": "bordo",
+    "foto": "",
+    "destaque": true
+  }
+]

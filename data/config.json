@@ -1,0 +1,25 @@
+{
+  "casal": {
+    "nome1": "Makar",
+    "nome2": "Lívia",
+    "dataInicio": "2026-01-16",
+    "fotoCasal": "",
+    "fotoHome": ""
+  },
+  "frases": [
+    { "texto": "Em você encontrei minha casa, meu lar e minha paz.", "autor": "💕" },
+    { "texto": "Cada dia ao seu lado é um presente que eu não merecia.", "autor": "❤️" },
+    { "texto": "Você é a minha história favorita.", "autor": "📖" },
+    { "texto": "Com você, o mundo fica mais bonito.", "autor": "🌸" },
+    { "texto": "Não sei como fui feliz antes de te conhecer.", "autor": "✨" },
+    { "texto": "Você chegou e ficou, e isso é tudo.", "autor": "💖" },
+    { "texto": "Eu escolho você todo dia.", "autor": "💘" },
+    { "texto": "É você. Sempre foi você.", "autor": "🌙" }
+  ],
+  "configuracoes": {
+    "coracoesAtivos": true,
+    "modoCelebracaoAtivo": true,
+    "temaSistema": "light",
+    "corPersonalizada": "#5A1C35"
+  }
+}

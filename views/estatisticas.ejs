@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estatísticas — Nosso Lugar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { background: var(--dark); color: var(--marfim); min-height: 100vh; }
+
+        /* ─── HERO ─── */
+        .stats-hero {
+            background: linear-gradient(180deg, rgba(90,28,53,.5) 0%, var(--dark) 100%);
+            padding: 5rem 1.5rem 3rem;
+            text-align: center;
+        }
+        .stats-hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,7vw,4.5rem); font-weight:600; }
+        .stats-hero p { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-style:italic; color:var(--rose-gold); }
+        .hero-line { width:60px; height:1px; background:linear-gradient(90deg,transparent,var(--rose-gold),transparent); margin:1.5rem auto; }
+
+        /* ─── GRID DE STATS ─── */
+        .stats-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(201,149,108,0.12);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all var(--transition-med);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--bordo), var(--rose-gold));
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .stat-card:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(201,149,108,0.25);
+            transform: translateY(-4px);
+        }
+
+        .stat-card:hover::before { opacity: 1; }
+
+        .stat-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+
+        .stat-numero {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--rose-gold);
+            line-height: 1;
+            display: block;
+        }
+
+        .stat-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(253,248,245,0.45);
+            margin-top: 0.5rem;
+        }
+
+        /* Destaque "Dias Juntos" */
+        .stat-card.destaque {
+            background: linear-gradient(135deg, rgba(90,28,53,0.5), rgba(201,149,108,0.2));
+            border-color: rgba(201,149,108,0.3);
+            grid-column: span 2;
+        }
+
+        @media (max-width:480px) { .stat-card.destaque { grid-column:span 1; } }
+
+        .stat-card.destaque .stat-numero {
+            font-size: 5rem;
+            color: var(--marfim);
+        }
+
+        .stat-card.destaque .stat-label {
+            color: var(--rose-gold);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+        }
+
+        /* Seção de frases */
+        .stats-frase {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid rgba(201,149,108,0.12);
+        }
+
+        .stats-frase blockquote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-style: italic;
+            color: rgba(253,248,245,0.7);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Barras de progresso estilizadas */
+        .stats-bars { margin-bottom: 3rem; }
+        .bar-item { margin-bottom: 1.25rem; }
+        .bar-header { display:flex; justify-content:space-between; margin-bottom:.4rem; }
+        .bar-label { font-size:.82rem; font-weight:500; color:rgba(253,248,245,.7); }
+        .bar-val { font-size:.82rem; font-weight:700; color:var(--rose-gold); }
+        .bar-track { height: 6px; background: rgba(255,255,255,.08); border-radius:6px; overflow:hidden; }
+        .bar-fill { height:100%; border-radius:6px; background:linear-gradient(90deg,var(--bordo),var(--rose-gold)); width:0%; transition:width 1.2s cubic-bezier(.16,1,.3,1); }
+    </style>
+</head>
+<body>
+<div id="floating-hearts-container"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div><div class="sidebar-title">Nosso Lugar</div><div class="sidebar-sub"><%= config.casal.nome1 %> & <%= config.casal.nome2 %></div></div>
+        <button class="btn-close btn-close-white" id="sidebarClose"></button>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="/"><span class="menu-icon">🏠</span> Início</a></li>
+        <li><a href="/historia"><span class="menu-icon">❤️</span> Nossa História</a></li>
+        <li><a href="/lembrancas"><span class="menu-icon">📸</span> Lembranças</a></li>
+        <li><a href="/cartas"><span class="menu-icon">💌</span> Cartas</a></li>
+        <li><a href="/playlist"><span class="menu-icon">🎵</span> Playlist</a></li>
+        <li><a href="/lugares"><span class="menu-icon">🗺️</span> Lugares</a></li>
+        <li><a href="/estatisticas" class="active"><span class="menu-icon">📊</span> Estatísticas</a></li>
+    </ul>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background:transparent!important;box-shadow:none;border-bottom:1px solid rgba(255,255,255,0.06);">
+    <div class="container-fluid px-4">
+        <button class="btn btn-link text-white p-2 me-2" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <a class="navbar-brand" href="/">❤️ Nosso Lugar</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="stats-hero">
+    <div class="hero-line"></div>
+    <h1 class="animate-fadeInUp">Estatísticas</h1>
+    <p class="animate-fadeInUp delay-2">Números que contam a nossa história</p>
+    <div class="hero-line"></div>
+</div>
+
+<!-- CARDS DE STATS -->
+<div class="stats-container">
+
+    <div class="stats-grid">
+
+        <!-- Dias juntos — destaque -->
+        <div class="stat-card destaque reveal">
+            <span class="stat-emoji">💑</span>
+            <span class="stat-numero" id="statDias">0</span>
+            <div class="stat-label">Dias juntos</div>
+        </div>
+
+        <!-- Lembranças -->
+        <div class="stat-card reveal delay-1">
+            <span class="stat-emoji">📸</span>
+            <span class="stat-numero" id="statLembrancas">0</span>
+            <div class="stat-label">Lembranças</div>
+        </div>
+
+        <!-- Favoritas -->
+        <div class="stat-card reveal delay-2">
+            <span class="stat-emoji">❤️</span>
+            <span class="stat-numero" id="statFavoritas">0</span>
+            <div class="stat-label">Favoritas</div>
+        </div>
+
+        <!-- Cartas -->
+        <div class="stat-card reveal delay-3">
+            <span class="stat-emoji">💌</span>
+            <span class="stat-numero" id="statCartas">0</span>
+            <div class="stat-label">Cartas escritas</div>
+        </div>
+
+        <!-- Músicas -->
+        <div class="stat-card reveal delay-4">
+            <span class="stat-emoji">🎵</span>
+            <span class="stat-numero" id="statMusicas">0</span>
+            <div class="stat-label">Músicas na playlist</div>
+        </div>
+
+        <!-- Lugares -->
+        <div class="stat-card reveal delay-5">
+            <span class="stat-emoji">🗺️</span>
+            <span class="stat-numero" id="statLugares">0</span>
+            <div class="stat-label">Lugares especiais</div>
+        </div>
+
+        <!-- Momentos -->
+        <div class="stat-card reveal delay-6">
+            <span class="stat-emoji">✨</span>
+            <span class="stat-numero" id="statMomentos">0</span>
+            <div class="stat-label">Momentos na história</div>
+        </div>
+
+    </div>
+
+    <!-- Barras de contribuição -->
+    <div class="stats-bars reveal">
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:600; color:var(--rose-gold); margin-bottom:1.5rem;">📊 Nosso acervo</h3>
+
+        <div class="bar-item">
+            <div class="bar-header"><span class="bar-label">📸 Lembranças</span><span class="bar-val"><%= stats.lembrancas %></span></div>
+            <div class="bar-track"><div class="bar-fill" data-pct="<%= Math.min(100, stats.lembrancas * 10) %>"></div></div>
+        </div>
+        <div class="bar-item">
+            <div class="bar-header"><span class="bar-label">💌 Cartas</span><span class="bar-val"><%= stats.cartas %></span></div>
+            <div class="bar-track"><div class="bar-fill" data-pct="<%= Math.min(100, stats.cartas * 20) %>"></div></div>
+        </div>
+        <div class="bar-item">
+            <div class="bar-header"><span class="bar-label">🎵 Músicas</span><span class="bar-val"><%= stats.musicas %></span></div>
+            <div class="bar-track"><div class="bar-fill" data-pct="<%= Math.min(100, stats.musicas * 8) %>"></div></div>
+        </div>
+        <div class="bar-item">
+            <div class="bar-header"><span class="bar-label">✨ Momentos da história</span><span class="bar-val"><%= stats.momentos %></span></div>
+            <div class="bar-track"><div class="bar-fill" data-pct="<%= Math.min(100, stats.momentos * 10) %>"></div></div>
+        </div>
+    </div>
+
+    <!-- Frase final -->
+    <div class="stats-frase reveal">
+        <blockquote>
+            "Cada número aqui é um dia mais feliz,<br>
+            uma memória guardada, uma história que a gente viveu juntos."
+        </blockquote>
+        <div class="hero-line" style="margin-top:2rem;"></div>
+        <p style="font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(253,248,245,.3); margin-top:1rem;">
+            <%= config.casal.nome1 %> & <%= config.casal.nome2 %> · Desde <%= new Date(config.casal.dataInicio || '2026-01-16').toLocaleDateString('pt-BR', {day:'numeric',month:'long',year:'numeric'}) %>
+        </p>
+    </div>
+
+</div>
+
+<footer style="border-top:1px solid rgba(201,149,108,.1);">
+    <p>Feito com <strong>❤️</strong> para <strong><%= config.casal.nome2 %></strong></p>
+</footer>
+
+<!-- Dados do servidor -->
+<script>
+const statsData = <%- JSON.stringify(stats) %>;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/animations.js"></script>
+<script>
+    // Sidebar
+    const sidebar=document.getElementById('sidebar'),sidebarToggle=document.getElementById('sidebarToggle'),sidebarClose=document.getElementById('sidebarClose'),sidebarOverlay=document.getElementById('sidebarOverlay');
+    sidebarToggle.addEventListener('click',()=>{sidebar.classList.add('active');sidebarOverlay.classList.add('active');document.body.style.overflow='hidden';});
+    sidebarClose.addEventListener('click',()=>{sidebar.classList.remove('active');sidebarOverlay.classList.remove('active');document.body.style.overflow='';});
+    sidebarOverlay.addEventListener('click',()=>{sidebar.classList.remove('active');sidebarOverlay.classList.remove('active');document.body.style.overflow='';});
+
+    // ── Contador animado ────────────────────────────────────────
+    function animarNumero(el, alvo, duracao = 1200) {
+        if (!el) return;
+        const inicio    = performance.now();
+        const valorAlvo = parseInt(alvo) || 0;
+
+        function passo(agora) {
+            const decorrido = agora - inicio;
+            const progresso = Math.min(decorrido / duracao, 1);
+            const ease = 1 - Math.pow(1 - progresso, 3); // ease out cubic
+            el.textContent = Math.round(ease * valorAlvo);
+            if (progresso < 1) requestAnimationFrame(passo);
+        }
+        requestAnimationFrame(passo);
+    }
+
+    // Dispara animações quando os cards ficam visíveis
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const card = entry.target;
+            const num = card.querySelector('.stat-numero');
+            if (!num || num.dataset.animado) return;
+            num.dataset.animado = 'true';
+
+            const id = num.id;
+            const mapa = {
+                statDias:       statsData.diasJuntos,
+                statLembrancas: statsData.lembrancas,
+                statFavoritas:  statsData.favoritas,
+                statCartas:     statsData.cartas,
+                statMusicas:    statsData.musicas,
+                statLugares:    statsData.lugares,
+                statMomentos:   statsData.momentos,
+            };
+            if (id in mapa) animarNumero(num, mapa[id]);
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.stat-card').forEach(c => observer.observe(c));
+
+    // Anima barras quando visíveis
+    const barObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.querySelectorAll('.bar-fill').forEach(bar => {
+                if (bar.dataset.animado) return;
+                bar.dataset.animado = 'true';
+                const pct = bar.dataset.pct || 0;
+                setTimeout(() => bar.style.width = pct + '%', 200);
+            });
+        });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.stats-bars').forEach(el => barObserver.observe(el));
+</script>
+</body>
+</html>

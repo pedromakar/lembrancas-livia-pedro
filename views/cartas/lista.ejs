@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossas Cartas — Nosso Lugar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body { background: var(--marfim); }
+
+        .cartas-hero {
+            background: linear-gradient(160deg, #1a0a12 0%, #2b1019 50%, #3d1830 100%);
+            color: var(--marfim);
+            padding: 5rem 1.5rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cartas-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 40%, rgba(201,149,108,0.1) 0%, transparent 65%);
+        }
+        .hero-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--rose-gold), transparent); margin: 0 auto 1.5rem; }
+        .cartas-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 7vw, 4.5rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+        .cartas-hero p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--rose-gold); margin-top: 0.5rem; position: relative; }
+
+        /* Grid de cartas */
+        .cartas-grid {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 1.5rem 4rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.75rem;
+        }
+
+        /* Card de carta */
+        .carta-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(201,149,108,0.12);
+            overflow: hidden;
+            transition: all var(--transition-med);
+            cursor: pointer;
+            position: relative;
+        }
+        .carta-card:hover { transform: translateY(-8px) rotate(-0.5deg); box-shadow: var(--shadow-lg); border-color: rgba(201,149,108,0.3); }
+
+        /* Lacre decorativo */
+        .carta-lacre {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--bordo), var(--bordo-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Cabeçalho colorido da carta */
+        .carta-header {
+            padding: 2rem 1.5rem 1.25rem;
+            background: linear-gradient(135deg, var(--marfim-dark), rgba(201,149,108,0.08));
+            border-bottom: 1px dashed rgba(201,149,108,0.3);
+        }
+
+        .carta-data {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--rose-gold-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .carta-titulo-card {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--bordo);
+            line-height: 1.3;
+            padding-right: 2.5rem;
+        }
+
+        /* Preview da carta */
+        .carta-preview {
+            padding: 1.25rem 1.5rem;
+        }
+
+        .carta-preview p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--dark-3);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-style: italic;
+        }
+
+        /* Rodapé da carta */
+        .carta-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1.5rem;
+            border-top: 1px solid rgba(201,149,108,0.08);
+        }
+
+        .btn-abrir-carta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.45rem 1rem;
+            background: linear-gradient(135deg, var(--bordo), var(--bordo-light));
+            color: var(--marfim);
+            border: none;
+            border-radius: var(--radius-pill);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+        .btn-abrir-carta:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); color: var(--marfim); }
+
+        .carta-acoes-small {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .btn-acao-xs {
+            padding: 0.25rem 0.6rem;
+            font-size: 0.7rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid;
+            background: transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: 'Inter', sans-serif;
+        }
+        .btn-editar-xs { border-color: rgba(90,28,53,0.25); color: var(--bordo); }
+        .btn-editar-xs:hover { background: var(--bordo); color: var(--marfim); }
+        .btn-deletar-xs { border-color: rgba(220,80,80,0.25); color: #c0392b; }
+        .btn-deletar-xs:hover { background: #c0392b; color: white; }
+
+        /* ─── MODAL LEITURA DA CARTA ─── */
+        .modal-leitura {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20,8,14,0.9);
+            backdrop-filter: blur(16px);
+            z-index: var(--z-modal);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-leitura.show { display: flex; }
+
+        .modal-papel {
+            background: #fffdfb;
+            border-radius: var(--radius-xl);
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: scaleIn 0.4s cubic-bezier(0.16,1,0.3,1);
+            border: 1px solid rgba(201,149,108,0.2);
+            position: relative;
+        }
+
+        .papel-ornamento {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            animation: heartBeat 2s ease-in-out infinite;
+        }
+
+        .papel-data { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose-gold-dark); text-align: center; margin-bottom: 0.5rem; }
+
+        .papel-titulo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--bordo);
+            text-align: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .papel-divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--rose-gold), transparent); margin: 1.5rem auto; }
+
+        .papel-corpo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            line-height: 2;
+            color: var(--dark-2);
+            white-space: pre-wrap;
+        }
+
+        .papel-assinar {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--bordo);
+            text-align: right;
+            margin-top: 2rem;
+        }
+
+        .btn-fechar-papel {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--cor-gray);
+            transition: all var(--transition-fast);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-fechar-papel:hover { background: var(--marfim-dark); color: var(--bordo); }
+
+        /* ─── MODAL FORMULÁRIO CARTA ─── */
+        .modal-form-carta {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20,8,14,0.82);
+            backdrop-filter: blur(10px);
+            z-index: calc(var(--z-modal) + 1);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-form-carta.show { display: flex; }
+
+        .modal-form-conteudo {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 580px;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: scaleIn 0.35s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .form-titulo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; color: var(--bordo); margin-bottom: 1.75rem; }
+        .form-label-p { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bordo); margin-bottom: 0.3rem; display: block; }
+        .form-ctrl { width: 100%; padding: 0.72rem 1rem; border: 1.5px solid rgba(201,149,108,0.3); border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: 0.88rem; color: var(--dark-2); background: var(--marfim); transition: border-color var(--transition-fast); outline: none; }
+        .form-ctrl:focus { border-color: var(--rose-gold); background: white; }
+        textarea.form-ctrl { resize: vertical; min-height: 140px; }
+
+        /* FAB */
+        .btn-fab { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--bordo), var(--bordo-light)); color: white; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 6px 24px rgba(90,28,53,0.4); transition: all var(--transition-fast); z-index: 500; display: flex; align-items: center; justify-content: center; }
+        .btn-fab:hover { transform: scale(1.1) rotate(45deg); box-shadow: 0 10px 32px rgba(90,28,53,0.55); }
+
+        .empty-cartas { text-align: center; padding: 5rem 2rem; }
+
+        @media (max-width: 600px) {
+            .cartas-grid { grid-template-columns: 1fr; }
+            .modal-papel { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div id="floating-hearts-container"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div><div class="sidebar-title">Nosso Lugar</div><div class="sidebar-sub"><%= config.casal.nome1 %> & <%= config.casal.nome2 %></div></div>
+        <button class="btn-close btn-close-white" id="sidebarClose"></button>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="/"><span class="menu-icon">🏠</span> Início</a></li>
+        <li><a href="/historia"><span class="menu-icon">❤️</span> Nossa História</a></li>
+        <li><a href="/lembrancas"><span class="menu-icon">📸</span> Lembranças</a></li>
+        <li><a href="/cartas" class="active"><span class="menu-icon">💌</span> Cartas</a></li>
+        <li><a href="/playlist"><span class="menu-icon">🎵</span> Playlist</a></li>
+        <li><a href="/lugares"><span class="menu-icon">🗺️</span> Lugares</a></li>
+        <li><a href="/estatisticas"><span class="menu-icon">📊</span> Estatísticas</a></li>
+    </ul>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <button class="btn btn-link text-white p-2 me-2" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <a class="navbar-brand" href="/">❤️ Nosso Lugar</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="/lembrancas">Lembranças</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/cartas">Cartas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/playlist">Playlist</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="cartas-hero">
+    <div class="hero-line"></div>
+    <h1 class="animate-fadeInUp">Nossas Cartas</h1>
+    <p class="animate-fadeInUp delay-2">Palavras que ficam para sempre</p>
+    <div class="hero-line" style="margin-top:1.5rem;"></div>
+    <p class="animate-fadeInUp delay-3" style="color:rgba(253,248,245,0.45); font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; margin-top:1rem;">
+        <%= cartas.length %> carta<%= cartas.length !== 1 ? 's' : '' %> escrita<%= cartas.length !== 1 ? 's' : '' %>
+    </p>
+</header>
+
+<!-- GRID -->
+<div class="cartas-grid">
+    <% if (cartas && cartas.length > 0) { %>
+        <% cartas.forEach(function(carta, i) { %>
+        <div class="carta-card reveal delay-<%= (i % 6) + 1 %>" id="carta-<%= carta.id %>">
+            <div class="carta-lacre">💌</div>
+            <div class="carta-header">
+                <div class="carta-data"><%= carta.data || 'Uma data especial' %></div>
+                <div class="carta-titulo-card"><%= carta.titulo %></div>
+            </div>
+            <div class="carta-preview">
+                <p>"<%= carta.conteudo ? carta.conteudo.substring(0, 150) : '' %>..."</p>
+            </div>
+            <div class="carta-footer">
+                <button class="btn-abrir-carta" onclick="abrirCarta(<%= carta.id %>)">
+                    <i class="fas fa-envelope-open"></i> Abrir carta
+                </button>
+                <div class="carta-acoes-small">
+                    <button class="btn-acao-xs btn-editar-xs" onclick="abrirModalEditar(<%= carta.id %>, this)"
+                        data-id="<%= carta.id %>"
+                        data-titulo="<%= carta.titulo %>"
+                        data-data="<%= carta.data || '' %>"
+                        data-conteudo="<%= (carta.conteudo || '').replace(/\"/g, '&quot;').replace(/\n/g, '&#10;') %>"
+                        data-autor="<%= carta.autor || '' %>">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <form action="/cartas/deletar/<%= carta.id %>" method="POST" style="display:inline;"
+                          onsubmit="return confirm('Excluir esta carta?')">
+                        <button type="submit" class="btn-acao-xs btn-deletar-xs"><i class="fas fa-trash"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    <% } else { %>
+        <div class="empty-cartas" style="grid-column:1/-1;">
+            <div style="font-size:3.5rem; margin-bottom:1rem;">💌</div>
+            <p style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-style:italic; color:var(--cor-gray);">
+                As primeiras cartas ainda vão ser escritas...
+            </p>
+        </div>
+    <% } %>
+</div>
+
+<!-- FOOTER -->
+<footer><p>Feito com <strong>❤️</strong> para <strong><%= config.casal.nome2 %></strong></p></footer>
+
+<!-- FAB -->
+<button class="btn-fab" id="btnFab" title="Escrever Carta">✏️</button>
+
+<!-- MODAL LEITURA -->
+<div class="modal-leitura" id="modalLeitura">
+    <div class="modal-papel">
+        <button class="btn-fechar-papel" id="btnFecharPapel">✕</button>
+        <div class="papel-ornamento">💌</div>
+        <div class="papel-data" id="papelData"></div>
+        <div class="papel-titulo" id="papelTitulo"></div>
+        <div class="papel-divider"></div>
+        <div class="papel-corpo" id="papelCorpo"></div>
+        <div class="papel-assinar" id="papelAssinar"></div>
+    </div>
+</div>
+
+<!-- MODAL FORMULÁRIO -->
+<div class="modal-form-carta" id="modalFormCarta">
+    <div class="modal-form-conteudo">
+        <h2 class="form-titulo" id="formCartaTitulo">Escrever Carta</h2>
+        <form id="formCarta" action="/cartas/criar" method="POST">
+            <div class="mb-3">
+                <label class="form-label-p">Título da Carta</label>
+                <input type="text" class="form-ctrl" name="titulo" id="fTitulo" placeholder="Ex: Para a pessoa mais linda do mundo" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Data</label>
+                <input type="text" class="form-ctrl" name="data" id="fData" placeholder="Ex: 16 de Janeiro, 2026">
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Conteúdo da Carta</label>
+                <textarea class="form-ctrl" name="conteudo" id="fConteudo" placeholder="Escreva do fundo do coração..." style="min-height:200px;" required></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="form-label-p">Assinatura</label>
+                <input type="text" class="form-ctrl" name="autor" id="fAutor" placeholder="Ex: Com amor, Makar ❤️">
+            </div>
+            <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
+                <button type="button" class="btn-acao-xs btn-editar-xs" id="btnCancelarForm" style="padding:0.6rem 1.25rem; font-size:0.85rem;">Cancelar</button>
+                <button type="submit" class="btn-abrir-carta" style="padding:0.7rem 1.75rem; font-size:0.88rem;">Salvar Carta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Dados das cartas para JS -->
+<script>
+const cartasData = <%- JSON.stringify(cartas) %>;
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/animations.js"></script>
+<script>
+    // Sidebar
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarClose = document.getElementById('sidebarClose');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const openSb = () => { sidebar.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; };
+    const closeSb = () => { sidebar.classList.remove('active'); sidebarOverlay.classList.remove('active'); document.body.style.overflow = ''; };
+    sidebarToggle.addEventListener('click', openSb);
+    sidebarClose.addEventListener('click', closeSb);
+    sidebarOverlay.addEventListener('click', closeSb);
+    document.querySelectorAll('.sidebar-menu a').forEach(l => l.addEventListener('click', closeSb));
+
+    // Modal leitura
+    const modalLeitura = document.getElementById('modalLeitura');
+    function abrirCarta(id) {
+        const c = cartasData.find(x => x.id === id);
+        if (!c) return;
+        document.getElementById('papelData').textContent = c.data || '';
+        document.getElementById('papelTitulo').textContent = c.titulo;
+        document.getElementById('papelCorpo').textContent = c.conteudo || '';
+        document.getElementById('papelAssinar').textContent = c.autor ? `— ${c.autor}` : '';
+        modalLeitura.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        if (window.lancarConfetesComemorativos) setTimeout(window.lancarConfetesComemorativos, 400);
+    }
+    document.getElementById('btnFecharPapel').addEventListener('click', () => { modalLeitura.classList.remove('show'); document.body.style.overflow = ''; });
+    modalLeitura.addEventListener('click', e => { if (e.target === modalLeitura) { modalLeitura.classList.remove('show'); document.body.style.overflow = ''; } });
+
+    // Modal formulário
+    const modalForm = document.getElementById('modalFormCarta');
+    const formCarta = document.getElementById('formCarta');
+    const btnFab = document.getElementById('btnFab');
+    const btnCancelar = document.getElementById('btnCancelarForm');
+
+    btnFab.addEventListener('click', () => {
+        document.getElementById('formCartaTitulo').textContent = 'Escrever Carta';
+        formCarta.action = '/cartas/criar';
+        formCarta.reset();
+        modalForm.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+    btnCancelar.addEventListener('click', () => { modalForm.classList.remove('show'); document.body.style.overflow = ''; });
+    modalForm.addEventListener('click', e => { if (e.target === modalForm) { modalForm.classList.remove('show'); document.body.style.overflow = ''; } });
+
+    window.abrirModalEditar = function(id, btn) {
+        const d = btn.dataset;
+        document.getElementById('formCartaTitulo').textContent = 'Editar Carta';
+        formCarta.action = `/cartas/editar/${id}`;
+        document.getElementById('fTitulo').value   = d.titulo   || '';
+        document.getElementById('fData').value     = d.data     || '';
+        document.getElementById('fConteudo').value = (d.conteudo || '').replace(/&#10;/g, '\n');
+        document.getElementById('fAutor').value    = d.autor    || '';
+        modalForm.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    };
+</script>
+</body>
+</html>

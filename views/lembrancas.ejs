@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lembranças — <%= config.casal.nome1 %> & <%= config.casal.nome2 %>">
+    <title>Lembranças — Nosso Lugar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        body { background: var(--marfim); }
+
+        /* ─── HERO ─── */
+        .lembrancas-hero {
+            background: linear-gradient(160deg, var(--dark) 0%, var(--dark-2) 50%, #2a0d1a 100%);
+            color: var(--marfim);
+            padding: 5rem 1.5rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lembrancas-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(201, 149, 108, 0.1) 0%, transparent 60%);
+        }
+
+        .hero-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--rose-gold), transparent);
+            margin: 0 auto 1.5rem;
+        }
+
+        .lembrancas-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.8rem, 7vw, 4.5rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            position: relative;
+            color: var(--marfim);
+        }
+
+        .lembrancas-hero p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--rose-gold);
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        /* ─── TOOLBAR DE BUSCA E FILTROS ─── */
+        .lembrancas-toolbar {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.75rem;
+            border: 1.5px solid rgba(201, 149, 108, 0.25);
+            border-radius: var(--radius-pill);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            background: white;
+            color: var(--dark-2);
+            transition: border-color var(--transition-fast);
+            outline: none;
+        }
+
+        .search-box input:focus { border-color: var(--rose-gold); }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cor-gray);
+            pointer-events: none;
+        }
+
+        .filtros {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filtro-btn {
+            padding: 0.55rem 1.1rem;
+            border: 1.5px solid rgba(201, 149, 108, 0.25);
+            background: white;
+            color: var(--dark-3);
+            border-radius: var(--radius-pill);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .filtro-btn:hover, .filtro-btn.ativo {
+            background: var(--bordo);
+            border-color: var(--bordo);
+            color: var(--marfim);
+        }
+
+        /* ─── CONTADORES ─── */
+        .lembrancas-stats {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 0.3rem 0.85rem;
+            background: rgba(201, 149, 108, 0.1);
+            color: var(--rose-gold-dark);
+            border-radius: var(--radius-pill);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        /* ─── GRID MASONRY ─── */
+        .lembrancas-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+            columns: 3;
+            column-gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) { .lembrancas-grid { columns: 2; } }
+        @media (max-width: 560px) { .lembrancas-grid { columns: 1; } }
+
+        /* ─── CARD DE LEMBRANÇA ─── */
+        .lembranca-card {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(201, 149, 108, 0.1);
+            overflow: hidden;
+            transition: all var(--transition-med);
+            opacity: 1;
+        }
+
+        .lembranca-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(201, 149, 108, 0.25);
+        }
+
+        .lembranca-card.oculto {
+            display: none;
+        }
+
+        /* Foto */
+        .lembranca-foto {
+            width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .lembranca-foto-placeholder {
+            width: 100%;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, var(--marfim-dark), var(--nude-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(90, 28, 53, 0.3);
+        }
+
+        /* Conteúdo do card */
+        .lembranca-corpo {
+            padding: 1.25rem 1.5rem 1rem;
+        }
+
+        .lembranca-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .lembranca-data {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--rose-gold-dark);
+        }
+
+        .lembranca-local {
+            font-size: 0.72rem;
+            color: var(--cor-gray);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .lembranca-titulo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--bordo);
+            line-height: 1.3;
+            margin-bottom: 0.6rem;
+        }
+
+        .lembranca-descricao {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.86rem;
+            line-height: 1.75;
+            color: var(--dark-3);
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .lembranca-descricao.expandida {
+            display: block;
+            -webkit-line-clamp: unset;
+        }
+
+        /* Tags */
+        .lembranca-tags {
+            margin-top: 0.85rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .tag {
+            padding: 0.2rem 0.6rem;
+            background: rgba(201, 149, 108, 0.1);
+            color: var(--rose-gold-dark);
+            border-radius: var(--radius-pill);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .tag:hover {
+            background: var(--rose-gold);
+            color: white;
+        }
+
+        /* Ações do card */
+        .lembranca-acoes {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem 1rem;
+            border-top: 1px solid rgba(201, 149, 108, 0.08);
+        }
+
+        .btn-favoritar {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.2rem;
+            line-height: 1;
+            transition: transform var(--transition-fast);
+            color: var(--cor-gray);
+        }
+
+        .btn-favoritar:hover { transform: scale(1.3); }
+        .btn-favoritar.favoritado { color: #e74c3c; }
+
+        .btn-expandir {
+            background: none;
+            border: none;
+            font-size: 0.75rem;
+            color: var(--rose-gold-dark);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            margin-left: auto;
+            padding: 0;
+        }
+
+        .btn-acao-sm {
+            padding: 0.25rem 0.65rem;
+            font-size: 0.72rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid;
+            background: transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-editar-sm {
+            border-color: rgba(90, 28, 53, 0.25);
+            color: var(--bordo);
+        }
+
+        .btn-editar-sm:hover { background: var(--bordo); color: var(--marfim); }
+
+        .btn-deletar-sm {
+            border-color: rgba(220, 80, 80, 0.25);
+            color: #c0392b;
+        }
+
+        .btn-deletar-sm:hover { background: #c0392b; color: white; }
+
+        /* ─── ESTADO VAZIO ─── */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            grid-column: 1/-1;
+        }
+
+        /* ─── BOTÃO SURPRESA ─── */
+        .btn-surpresa-wrapper {
+            text-align: center;
+            padding: 2rem 1rem 1rem;
+        }
+
+        /* ─── MODAL FORM ─── */
+        .modal-lem {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(20, 8, 14, 0.82);
+            backdrop-filter: blur(10px);
+            z-index: var(--z-modal);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-lem.show { display: flex; }
+
+        .modal-lem-conteudo {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 580px;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-lem-titulo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--bordo);
+            margin-bottom: 1.75rem;
+        }
+
+        .form-label-p {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--bordo);
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .form-ctrl {
+            width: 100%;
+            padding: 0.72rem 1rem;
+            border: 1.5px solid rgba(201, 149, 108, 0.3);
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            color: var(--dark-2);
+            background: var(--marfim);
+            transition: border-color var(--transition-fast);
+            outline: none;
+        }
+        .form-ctrl:focus { border-color: var(--rose-gold); background: white; }
+        textarea.form-ctrl { resize: vertical; min-height: 90px; }
+
+        /* ─── BOTÃO ADICIONAR FLUTUANTE ─── */
+        .btn-adicionar-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bordo), var(--bordo-light));
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 6px 24px rgba(90, 28, 53, 0.4);
+            transition: all var(--transition-fast);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-adicionar-fab:hover {
+            transform: scale(1.1) rotate(45deg);
+            box-shadow: 0 10px 32px rgba(90, 28, 53, 0.55);
+        }
+
+        /* Toast de notificação */
+        .toast-notif {
+            position: fixed;
+            bottom: 5.5rem;
+            right: 2rem;
+            background: var(--dark);
+            color: var(--marfim);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            z-index: var(--z-toast);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .toast-notif.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<div id="floating-hearts-container"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div>
+            <div class="sidebar-title">Nosso Lugar</div>
+            <div class="sidebar-sub"><%= config.casal.nome1 %> & <%= config.casal.nome2 %></div>
+        </div>
+        <button class="btn-close btn-close-white" id="sidebarClose"></button>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="/"><span class="menu-icon">🏠</span> Início</a></li>
+        <li><a href="/historia"><span class="menu-icon">❤️</span> Nossa História</a></li>
+        <li><a href="/lembrancas" class="active"><span class="menu-icon">📸</span> Lembranças</a></li>
+        <li><a href="/cartas"><span class="menu-icon">💌</span> Cartas</a></li>
+        <li><a href="/playlist"><span class="menu-icon">🎵</span> Playlist</a></li>
+        <li><a href="/lugares"><span class="menu-icon">🗺️</span> Lugares</a></li>
+        <li><a href="/estatisticas"><span class="menu-icon">📊</span> Estatísticas</a></li>
+    </ul>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
+        <button class="btn btn-link text-white p-2 me-2" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <a class="navbar-brand" href="/">❤️ Nosso Lugar</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+                <li class="nav-item"><a class="nav-link" href="/historia">Nossa História</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/lembrancas">Lembranças</a></li>
+                <li class="nav-item"><a class="nav-link" href="/cartas">Cartas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/playlist">Playlist</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="lembrancas-hero">
+    <div class="hero-line"></div>
+    <h1 class="animate-fadeInUp">Lembranças</h1>
+    <p class="animate-fadeInUp delay-2">Os momentos que a gente nunca quer esquecer</p>
+    <div class="hero-line" style="margin-top: 1.5rem;"></div>
+</header>
+
+<!-- ═══ TOOLBAR ═══ -->
+<div class="lembrancas-toolbar">
+    <!-- Pesquisa -->
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="buscaInput" placeholder="Pesquisar lembranças..." autocomplete="off">
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros">
+        <button class="filtro-btn ativo" data-filtro="todos">Todas</button>
+        <button class="filtro-btn" data-filtro="favoritos">❤️ Favoritas</button>
+        <button class="filtro-btn" data-filtro="IFC">IFC</button>
+        <button class="filtro-btn" data-filtro="casa">Em Casa</button>
+    </div>
+
+    <!-- Botão surpresa -->
+    <button class="btn-surpresa" id="btn-surpreenda" style="padding: 0.6rem 1.5rem; font-size: 0.85rem; gap: 6px;">
+        ✨ Surpreenda-me
+    </button>
+</div>
+
+<!-- ═══ STATS ═══ -->
+<div class="lembrancas-stats">
+    <span class="stat-badge">📸 <%= lembrancas.length %> lembranças</span>
+    <span class="stat-badge">❤️ <%= lembrancas.filter(l => l.favorito).length %> favoritas</span>
+    <span id="stat-visiveis" class="stat-badge" style="display: none;"></span>
+</div>
+
+<!-- ═══ GRID MASONRY ═══ -->
+<div class="lembrancas-grid" id="lembrancasGrid">
+
+    <% if (lembrancas && lembrancas.length > 0) { %>
+        <% lembrancas.forEach(function(l, idx) { %>
+
+        <div class="lembranca-card reveal"
+             id="lembranca-<%= l.id %>"
+             data-titulo="<%= l.titulo.toLowerCase() %>"
+             data-descricao="<%= l.descricao.toLowerCase() %>"
+             data-tags="<%= (l.tags || '').toLowerCase() %>"
+             data-local="<%= (l.local || '').toLowerCase() %>"
+             data-favorito="<%= l.favorito ? 'true' : 'false' %>">
+
+            <!-- Foto ou emoji placeholder -->
+            <% if (l.imagem) { %>
+                <img src="<%= l.imagem %>" alt="<%= l.titulo %>" class="lembranca-foto">
+            <% } else { %>
+                <div class="lembranca-foto-placeholder"><%= l.icone || '📸' %></div>
+            <% } %>
+
+            <!-- Corpo -->
+            <div class="lembranca-corpo">
+                <div class="lembranca-meta">
+                    <span class="lembranca-data"><%= l.dataFormatada || l.data %></span>
+                    <% if (l.local) { %>
+                    <span class="lembranca-local"><i class="fas fa-map-marker-alt" style="font-size: 0.65rem;"></i> <%= l.local %></span>
+                    <% } %>
+                </div>
+                <div class="lembranca-titulo"><%= l.titulo %></div>
+                <div class="lembranca-descricao" id="desc-<%= l.id %>"><%= l.descricao %></div>
+
+                <!-- Tags -->
+                <% if (l.tags) { %>
+                <div class="lembranca-tags">
+                    <% l.tags.split(',').forEach(function(tag) { %>
+                        <% if (tag.trim()) { %>
+                        <span class="tag" onclick="filtrarPorTag('<%= tag.trim() %>')">#<%= tag.trim() %></span>
+                        <% } %>
+                    <% }) %>
+                </div>
+                <% } %>
+            </div>
+
+            <!-- Ações -->
+            <div class="lembranca-acoes">
+                <!-- Favoritar -->
+                <button class="btn-favoritar <%= l.favorito ? 'favoritado' : '' %>"
+                        id="fav-<%= l.id %>"
+                        onclick="toggleFavorito(<%= l.id %>, this)"
+                        title="<%= l.favorito ? 'Desfavoritar' : 'Favoritar' %>">
+                    <%= l.favorito ? '❤️' : '🤍' %>
+                </button>
+
+                <!-- Expandir texto -->
+                <button class="btn-expandir" onclick="toggleExpandir(<%= l.id %>, this)">Ver mais</button>
+
+                <!-- Editar -->
+                <button class="btn-acao-sm btn-editar-sm ms-auto" onclick="abrirModalEditar(<%= l.id %>, this)"
+                    data-id="<%= l.id %>"
+                    data-titulo="<%= l.titulo %>"
+                    data-data="<%= l.data %>"
+                    data-dataformatada="<%= l.dataFormatada || '' %>"
+                    data-descricao="<%= l.descricao.replace(/\"/g, '&quot;') %>"
+                    data-icone="<%= l.icone || '📸' %>"
+                    data-tags="<%= l.tags || '' %>"
+                    data-imagem="<%= l.imagem || '' %>"
+                    data-local="<%= l.local || '' %>"
+                    data-favorito="<%= l.favorito %>">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+
+                <!-- Deletar -->
+                <form action="/lembrancas/deletar/<%= l.id %>" method="POST" style="display:inline;"
+                      onsubmit="return confirm('Excluir esta lembrança?')">
+                    <button type="submit" class="btn-acao-sm btn-deletar-sm">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <% }) %>
+    <% } else { %>
+        <div class="empty-state">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem;">📸</div>
+            <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; color: var(--cor-gray);">
+                As primeiras lembranças ainda vão ser criadas...
+            </p>
+        </div>
+    <% } %>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <p>Feito com <strong>❤️</strong> para <strong><%= config.casal.nome2 %></strong></p>
+</footer>
+
+<!-- ═══ FAB ADICIONAR ═══ -->
+<button class="btn-adicionar-fab" id="btnFab" title="Adicionar Lembrança">+</button>
+
+<!-- Toast -->
+<div class="toast-notif" id="toastNotif"></div>
+
+<!-- ═══ MODAL FORMULÁRIO ═══ -->
+<div class="modal-lem" id="modalLem">
+    <div class="modal-lem-conteudo">
+        <h2 class="modal-lem-titulo" id="modalLemTitulo">Nova Lembrança</h2>
+
+        <form id="formLem" action="/lembrancas/criar" method="POST">
+            <div class="mb-3">
+                <label class="form-label-p">Emoji / Ícone</label>
+                <input type="text" class="form-ctrl" name="icone" id="campoIcone" placeholder="📸" maxlength="4">
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Título</label>
+                <input type="text" class="form-ctrl" name="titulo" id="campoTitulo" placeholder="Ex: Primeiro Selinho" required>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-6">
+                    <label class="form-label-p">Data exibida</label>
+                    <input type="text" class="form-ctrl" name="dataFormatada" id="campoDataFormatada" placeholder="Ex: Junho de 2025">
+                </div>
+                <div class="col-sm-6" style="margin-top: 0.25rem;">
+                    <label class="form-label-p">Data (para ordenação)</label>
+                    <input type="date" class="form-ctrl" name="data" id="campoData">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Descrição</label>
+                <textarea class="form-ctrl" name="descricao" id="campoDescricao" placeholder="Conta como foi..." required></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Local</label>
+                <input type="text" class="form-ctrl" name="local" id="campoLocal" placeholder="Ex: IFC, Minha casa...">
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Tags (separadas por vírgula)</label>
+                <input type="text" class="form-ctrl" name="tags" id="campoTags" placeholder="Ex: especial, escola, amor">
+            </div>
+            <div class="mb-3">
+                <label class="form-label-p">Link da Foto (URL)</label>
+                <input type="text" class="form-ctrl" name="imagem" id="campoImagem" placeholder="https://... (opcional)">
+            </div>
+            <div class="mb-4" style="display: flex; align-items: center; gap: 0.75rem;">
+                <input type="checkbox" name="favorito" value="true" id="campoFavorito"
+                       style="width: 18px; height: 18px; accent-color: var(--bordo);">
+                <label for="campoFavorito" class="form-label-p" style="margin: 0; cursor: pointer;">❤️ Marcar como favorita</label>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" class="btn-acao-sm btn-editar-sm" id="btnCancelarLem"
+                        style="padding: 0.65rem 1.5rem; font-size: 0.85rem;">Cancelar</button>
+                <button type="submit" class="btn-adicionar-evento" style="padding: 0.7rem 1.75rem; font-size: 0.9rem;">
+                    Salvar Lembrança
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ─── SCRIPTS ─── -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/animations.js"></script>
+<script>
+    // ── Sidebar ─────────────────────────────────────────────────
+    const sidebar        = document.getElementById('sidebar');
+    const sidebarToggle  = document.getElementById('sidebarToggle');
+    const sidebarClose   = document.getElementById('sidebarClose');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const openSb  = () => { sidebar.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; };
+    const closeSb = () => { sidebar.classList.remove('active'); sidebarOverlay.classList.remove('active'); document.body.style.overflow = ''; };
+    sidebarToggle.addEventListener('click', openSb);
+    sidebarClose.addEventListener('click', closeSb);
+    sidebarOverlay.addEventListener('click', closeSb);
+    document.querySelectorAll('.sidebar-menu a').forEach(l => l.addEventListener('click', closeSb));
+
+    // ── Toast ────────────────────────────────────────────────────
+    function mostrarToast(msg) {
+        const t = document.getElementById('toastNotif');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // ── Favoritar ────────────────────────────────────────────────
+    async function toggleFavorito(id, btn) {
+        btn.style.transform = 'scale(1.4)';
+        setTimeout(() => btn.style.transform = '', 250);
+        try {
+            const r = await fetch(`/api/lembrancas/favoritar/${id}`, { method: 'POST' });
+            const data = await r.json();
+            const card = document.getElementById(`lembranca-${id}`);
+            if (data.favorito) {
+                btn.textContent = '❤️';
+                btn.classList.add('favoritado');
+                card.dataset.favorito = 'true';
+                mostrarToast('Adicionada aos favoritos ❤️');
+            } else {
+                btn.textContent = '🤍';
+                btn.classList.remove('favoritado');
+                card.dataset.favorito = 'false';
+                mostrarToast('Removida dos favoritos');
+            }
+        } catch (_) {
+            mostrarToast('Erro ao favoritar 😕');
+        }
+    }
+
+    // ── Expandir texto ───────────────────────────────────────────
+    function toggleExpandir(id, btn) {
+        const desc = document.getElementById(`desc-${id}`);
+        if (desc.classList.contains('expandida')) {
+            desc.classList.remove('expandida');
+            btn.textContent = 'Ver mais';
+        } else {
+            desc.classList.add('expandida');
+            btn.textContent = 'Ver menos';
+        }
+    }
+
+    // ── Pesquisa + Filtros ───────────────────────────────────────
+    const cards    = document.querySelectorAll('.lembranca-card');
+    const busca    = document.getElementById('buscaInput');
+    const filtros  = document.querySelectorAll('.filtro-btn');
+    const statVis  = document.getElementById('stat-visiveis');
+    let filtroAtual = 'todos';
+    let termoBusca  = '';
+
+    function aplicarFiltros() {
+        let visiveis = 0;
+        cards.forEach(card => {
+            const titulo    = card.dataset.titulo    || '';
+            const descricao = card.dataset.descricao || '';
+            const tags      = card.dataset.tags      || '';
+            const local     = card.dataset.local     || '';
+            const favorito  = card.dataset.favorito  === 'true';
+
+            const passaBusca = !termoBusca ||
+                titulo.includes(termoBusca) ||
+                descricao.includes(termoBusca) ||
+                tags.includes(termoBusca) ||
+                local.includes(termoBusca);
+
+            let passaFiltro = true;
+            if (filtroAtual === 'favoritos') passaFiltro = favorito;
+            else if (filtroAtual !== 'todos') passaFiltro = local.includes(filtroAtual.toLowerCase()) || tags.includes(filtroAtual.toLowerCase());
+
+            if (passaBusca && passaFiltro) {
+                card.classList.remove('oculto');
+                visiveis++;
+            } else {
+                card.classList.add('oculto');
+            }
+        });
+
+        if (termoBusca || filtroAtual !== 'todos') {
+            statVis.textContent = `${visiveis} resultado${visiveis !== 1 ? 's' : ''}`;
+            statVis.style.display = 'inline-flex';
+        } else {
+            statVis.style.display = 'none';
+        }
+    }
+
+    busca.addEventListener('input', () => {
+        termoBusca = busca.value.toLowerCase().trim();
+        aplicarFiltros();
+    });
+
+    filtros.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filtros.forEach(b => b.classList.remove('ativo'));
+            btn.classList.add('ativo');
+            filtroAtual = btn.dataset.filtro;
+            aplicarFiltros();
+        });
+    });
+
+    window.filtrarPorTag = function(tag) {
+        busca.value = tag;
+        termoBusca = tag.toLowerCase();
+        filtros.forEach(b => { b.classList.remove('ativo'); if (b.dataset.filtro === 'todos') b.classList.add('ativo'); });
+        filtroAtual = 'todos';
+        aplicarFiltros();
+        busca.focus();
+    };
+
+    // ── Modal Formulário ─────────────────────────────────────────
+    const modalLem   = document.getElementById('modalLem');
+    const formLem    = document.getElementById('formLem');
+    const modalTitulo = document.getElementById('modalLemTitulo');
+    const btnFab     = document.getElementById('btnFab');
+    const btnCancelar = document.getElementById('btnCancelarLem');
+
+    function fecharModal() {
+        modalLem.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    btnFab.addEventListener('click', () => {
+        modalTitulo.textContent = 'Nova Lembrança';
+        formLem.action = '/lembrancas/criar';
+        formLem.reset();
+        modalLem.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+
+    btnCancelar.addEventListener('click', fecharModal);
+    modalLem.addEventListener('click', e => { if (e.target === modalLem) fecharModal(); });
+
+    window.abrirModalEditar = function(id, btn) {
+        const d = btn.dataset;
+        modalTitulo.textContent = 'Editar Lembrança';
+        formLem.action = `/lembrancas/editar/${id}`;
+        document.getElementById('campoIcone').value         = d.icone         || '';
+        document.getElementById('campoTitulo').value        = d.titulo         || '';
+        document.getElementById('campoDataFormatada').value = d.dataformatada  || '';
+        document.getElementById('campoData').value          = d.data           || '';
+        document.getElementById('campoDescricao').value     = d.descricao      || '';
+        document.getElementById('campoLocal').value         = d.local          || '';
+        document.getElementById('campoTags').value          = d.tags           || '';
+        document.getElementById('campoImagem').value        = d.imagem         || '';
+        document.getElementById('campoFavorito').checked    = d.favorito === 'true';
+        modalLem.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    };
+
+    // ── Botão Surpreenda ────────────────────────────────────────
+    document.getElementById('btn-surpreenda').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const cardsVisiveis = [...cards].filter(c => !c.classList.contains('oculto'));
+        if (!cardsVisiveis.length) return;
+        const card = cardsVisiveis[Math.floor(Math.random() * cardsVisiveis.length)];
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.style.transition = 'box-shadow 0.3s';
+        card.style.boxShadow = '0 0 0 4px var(--rose-gold)';
+        setTimeout(() => card.style.boxShadow = '', 2000);
+        mostrarToast('✨ Aqui está uma memória especial!');
+    });
+</script>
+</body>
+</html>
