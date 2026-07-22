@@ -1,4 +1,4 @@
-# 💕 Nosso Lugar
+# 💕 Nosso Lugar (lembrancas-livia-pedro)
 
 Um presente digital especial para você! Um sistema web interativo e responsivo onde você pode compartilhar mensagens, fotos e momentos especiais com sua namorada.
 
@@ -23,7 +23,7 @@ Antes de começar, você precisa ter instalado:
 ### 1. Clone ou copie os arquivos do projeto
 
 ```bash
-# Nave navegação até a pasta do projeto
+# Navegação até a pasta do projeto
 cd livia
 ```
 
