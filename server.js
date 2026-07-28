@@ -27,8 +27,8 @@ app.use(session({
 
 // ========== SEGURANÇA — Senha de acesso ao site ==========
 app.use((req, res, next) => {
-  const user = process.env.SITE_USER || 'amor';
-  const pass = process.env.SITE_PASSWORD || '1234';
+  const user = process.env.SITE_USER || 'pedro';
+  const pass = process.env.SITE_PASSWORD || '12345';
 
   const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
   const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
