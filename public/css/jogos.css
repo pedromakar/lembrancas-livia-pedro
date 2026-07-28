@@ -313,6 +313,21 @@
 .tab-celula.preview { background: rgba(201, 149, 108, 0.4); border-color: var(--rose-gold, #C9956C); }
 .tab-celula.preview-invalido { background: rgba(220, 53, 69, 0.3); border-color: #dc3545; }
 
+.navio-overlay {
+    background: linear-gradient(135deg, var(--bordo, #5A1C35) 0%, #8c3855 100%);
+    border-radius: 999px; /* Forma de pílula (pill) para parecer um barco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    z-index: 5;
+    pointer-events: none; /* Deixa os cliques passarem para as células por baixo */
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 8px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+}
+
 /* Tabuleiro do adversário (ataque) */
 .tab-celula.acerto {
     background: linear-gradient(135deg, #dc2626, #ef4444);

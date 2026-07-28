@@ -282,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
             el.classList.remove('navio');
             delete el.dataset.navioId;
         });
+        document.querySelectorAll('#tab-pos .navio-overlay').forEach(el => el.remove());
         document.querySelectorAll('.navio-item').forEach(i => i.classList.remove('posicionado'));
 
         for (const cfg of estado.naviosConfig) {
@@ -300,7 +301,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             const el = document.getElementById(`tab-pos-${ll}-${cc}`);
                             if (el) { el.classList.add('navio'); el.dataset.navioId = id; }
                         });
-                        estado.naviosPosicionados.push({ id, nome: cfg.nome, icone: cfg.icone, tamanho: cfg.tamanho, linha: l, coluna: c, horizontal: horiz });
+                        const novoNavio = { id, nome: cfg.nome, icone: cfg.icone, tamanho: cfg.tamanho, linha: l, coluna: c, horizontal: horiz };
+                        estado.naviosPosicionados.push(novoNavio);
+                        adicionarOverlayNavio('tab-pos', novoNavio);
                         posicionado = true;
                     }
                 }
@@ -365,8 +368,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 })();
                 el.classList.remove('preview');
                 if (navioAfundado) {
-                    el.classList.add('afundado');
-                    icon.textContent = '💀';
+                    adicionarOverlayNavio('tab-ataque', navioAfundado);
+                    // Pinta todas as células do navio afundado
+                    for(let i=0; i<navioAfundado.tamanho; i++){
+                        const ll = navioAfundado.horizontal ? navioAfundado.linha : navioAfundado.linha + i;
+                        const cc = navioAfundado.horizontal ? navioAfundado.coluna + i : navioAfundado.coluna;
+                        const e = document.getElementById(`tab-ataque-${ll}-${cc}`);
+                        if(e){
+                            e.classList.remove('acerto');
+                            e.classList.add('afundado');
+                            e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                        }
+                    }
                     AudioJogo.afundado();
                     toast(msgAleatoria(mensagensAfundado), 3500);
                     addLog(`${estado.meuNome}: afundou o ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');
@@ -397,8 +410,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     return d;
                 })();
                 if (navioAfundado) {
-                    el.classList.add('acerto');
-                    icon.textContent = '💀';
+                    // Atualiza todas as células do meu navio para 💀
+                    for(let i=0; i<navioAfundado.tamanho; i++){
+                        const ll = navioAfundado.horizontal ? navioAfundado.linha : navioAfundado.linha + i;
+                        const cc = navioAfundado.horizontal ? navioAfundado.coluna + i : navioAfundado.coluna;
+                        const e = document.getElementById(`tab-meu-${ll}-${cc}`);
+                        if(e){
+                            e.classList.add('acerto');
+                            e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                        }
+                    }
                     addLog(`${estado.adversarioNome}: afundou seu ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');
                 } else if (acertou) {
                     el.classList.add('acerto');
@@ -430,17 +451,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Renderiza meus navios no tabuleiro da batalha ─
     function renderizarNaviosProprios() {
         estado.naviosPosicionados.forEach(navio => {
-            const meio = Math.floor(navio.tamanho / 2);
+            adicionarOverlayNavio('tab-meu', navio);
             for (let i = 0; i < navio.tamanho; i++) {
                 const l = navio.horizontal ? navio.linha : navio.linha + i;
                 const c = navio.horizontal ? navio.coluna + i : navio.coluna;
                 const el = document.getElementById(`tab-meu-${l}-${c}`);
-                if (el) {
-                    el.classList.add('navio-proprio');
-                    if (i === meio) {
-                        el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.icone}</span>`;
-                    }
-                }
+                if (el) el.classList.add('navio-proprio');
             }
         });
     }
@@ -634,4 +650,22 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('batalha:parceiro-quer-jogar-de-novo', () => {
         toast('Seu parceiro quer jogar de novo! Recarregue a página. 🔄', 5000);
     });
+
+    socket.on('disconnect', () => {
+        toast('❌ Desconectado do servidor. Tentando reconectar...', 5000);
+    });
+
+    function adicionarOverlayNavio(containerId, navio) {
+        const overlay = document.createElement('div');
+        overlay.className = 'navio-overlay';
+        const rowStart = navio.linha + 2;
+        const colStart = navio.coluna + 2;
+        if (navio.horizontal) {
+            overlay.style.gridArea = `${rowStart} / ${colStart} / span 1 / span ${navio.tamanho}`;
+        } else {
+            overlay.style.gridArea = `${rowStart} / ${colStart} / span ${navio.tamanho} / span 1`;
+        }
+        overlay.innerHTML = navio.icone;
+        document.getElementById(containerId).appendChild(overlay);
+    }
 });

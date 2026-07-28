@@ -213,15 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Atualiza UI
         renderizarPainelNavios(jogador);
         criarTabuleiroPos();
-        jogador.navios.forEach(navio => {
-            const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
-            const meio = Math.floor(cells.length / 2);
-            cells.forEach(([ll, cc], idx) => {
-                const el = document.getElementById(`tab-pos-${ll}-${cc}`);
-                el.classList.add('navio');
-                if (idx === meio) el.innerHTML = `<span style="font-size: 1.2rem;">${navio.icone}</span>`;
-            });
-        });
+        jogador.navios.forEach(navio => adicionarOverlayNavio('tab-pos', navio));
         document.getElementById('btn-confirmar-posicao').disabled = false;
     });
 
@@ -235,14 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return toast('Posição inválida!');
         }
 
-        const meio = Math.floor(celulas.length / 2);
-        celulas.forEach(([ll, cc], index) => {
-            jogador.tab[ll][cc].navio = id;
-            const el = document.getElementById(`tab-pos-${ll}-${cc}`);
-            el.classList.add('navio');
-            if (index === meio) el.innerHTML = `<span style="font-size: 1.2rem;">${icone}</span>`;
-        });
-        jogador.navios.push({ id, nome, icone, tamanho, linha: l, coluna: c, horizontal: estado.horizontal });
+        celulas.forEach(([ll, cc]) => jogador.tab[ll][cc].navio = id);
+        const novoNavio = { id, nome, icone, tamanho, linha: l, coluna: c, horizontal: estado.horizontal };
+        jogador.navios.push(novoNavio);
+        
+        adicionarOverlayNavio('tab-pos', novoNavio);
         
         estado.navioSelecionado = null;
         limparPreview();
@@ -303,17 +292,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('campo-meu-label').textContent = `Seu Campo (${jAtual.nome})`;
         
         jAtual.navios.forEach(navio => {
+            adicionarOverlayNavio('tab-meu', navio);
             const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
-            const meio = Math.floor(cells.length / 2);
-            cells.forEach(([ll, cc], idx) => {
+            cells.forEach(([ll, cc]) => {
                 const el = document.getElementById(`tab-meu-${ll}-${cc}`);
-                el.classList.add('navio-proprio');
-                if (idx === meio) el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.icone}</span>`;
-                
                 // Se foi atingido pelo inimigo
                 if (jAtual.tab[ll][cc].atingido) {
                     el.classList.add('acerto');
-                    el.innerHTML += '<div class="celula-icon">💥</div>';
+                    el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💥</div>';
                 }
             });
         });
@@ -419,11 +405,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 addLog(`${jAtual.nome} afundou o ${navioCfg.icone} ${navioCfg.nome} de ${adv.nome}!`, 'afundado-log');
                 toast(msgsAfundado[Math.floor(Math.random()*msgsAfundado.length)], 4000);
                 
-                // Caveira em todas as partes do navio
+                // Adiciona o overlay do navio afundado
+                adicionarOverlayNavio('tab-ataque', navioCfg);
+                
+                // Caveira em todas as partes do navio por cima do overlay
                 cellsNavio.forEach(([ll, cc]) => {
                     const e = document.getElementById(`tab-ataque-${ll}-${cc}`);
                     e.classList.add('afundado');
-                    e.innerHTML = '<div class="celula-icon">💀</div>';
+                    e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
                 });
                 
                 // Checa vitória
@@ -493,6 +482,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 melhorSequencia: estado.melhorSequencia
             })
         }).then(() => console.log('Placar local salvo no banco!'));
+    }
+
+    function adicionarOverlayNavio(containerId, navio) {
+        const overlay = document.createElement('div');
+        overlay.className = 'navio-overlay';
+        const rowStart = navio.linha + 2;
+        const colStart = navio.coluna + 2;
+        if (navio.horizontal) {
+            overlay.style.gridArea = `${rowStart} / ${colStart} / span 1 / span ${navio.tamanho}`;
+        } else {
+            overlay.style.gridArea = `${rowStart} / ${colStart} / span ${navio.tamanho} / span 1`;
+        }
+        overlay.innerHTML = navio.icone;
+        document.getElementById(containerId).appendChild(overlay);
     }
 
     document.getElementById('btn-jogar-de-novo').addEventListener('click', () => window.location.reload());
