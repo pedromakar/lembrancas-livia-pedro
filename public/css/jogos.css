@@ -1,0 +1,721 @@
+/* =====================================================
+   jogos.css — Estilos do módulo de Jogos
+   Usa os tokens de design do site (style.css)
+   Paleta: Bordô · Rose Gold · Marfim · Dark Elegante
+   ===================================================== */
+
+/* ── Hub de Jogos ─────────────────────────────────── */
+.jogos-hero {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+}
+
+.jogos-hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    color: var(--bordo, #5A1C35);
+    margin-bottom: 0.5rem;
+}
+
+.jogos-hero p {
+    color: var(--cor-gray, #76656D);
+    font-size: 1.1rem;
+}
+
+.jogos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem 0;
+}
+
+.jogo-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(201, 149, 108, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 32px rgba(90, 28, 53, 0.08);
+    position: relative;
+    overflow: hidden;
+}
+
+.jogo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--bordo, #5A1C35), var(--rose-gold, #C9956C));
+    border-radius: 20px 20px 0 0;
+}
+
+.jogo-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(90, 28, 53, 0.16);
+}
+
+.jogo-card .jogo-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    animation: float 3s ease-in-out infinite;
+}
+
+.jogo-card h2 {
+    color: var(--bordo, #5A1C35);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.jogo-card p {
+    color: var(--cor-gray, #76656D);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.jogo-card .badge-em-breve {
+    background: rgba(201, 149, 108, 0.15);
+    color: var(--rose-gold-dark, #a87850);
+    padding: 0.3rem 0.8rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* ── Estatísticas Hub ─────────────────────────────── */
+.stats-hub {
+    background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46);
+    color: white;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+
+.stat-item .stat-valor {
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.stat-item .stat-label {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ── Histórico de Partidas ────────────────────────── */
+.historico-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.historico-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.6);
+    margin-bottom: 0.5rem;
+    transition: background 0.2s;
+}
+
+.historico-item:hover { background: rgba(255,255,255,0.9); }
+
+.historico-item .winner-badge {
+    background: linear-gradient(135deg, var(--bordo, #5A1C35), var(--rose-gold, #C9956C));
+    color: white;
+    padding: 0.2rem 0.7rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.historico-item .data-str {
+    color: var(--cor-gray, #76656D);
+    font-size: 0.8rem;
+    margin-left: auto;
+}
+
+/* ─────────────────────────────────────────────────── */
+/* ── Batalha Naval — Layout Principal ─────────────── */
+/* ─────────────────────────────────────────────────── */
+.bn-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #fff8f4 0%, #fdf0ea 100%);
+}
+
+/* ── Fases ────────────────────────────────────────── */
+.fase {
+    display: none;
+    animation: fadeSlideIn 0.5s ease forwards;
+}
+.fase.ativa { display: block; }
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Lobby ────────────────────────────────────────── */
+.bn-lobby {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.bn-lobby h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    color: var(--bordo, #5A1C35);
+}
+
+.bn-lobby .subtitulo {
+    color: var(--cor-gray, #76656D);
+    margin-bottom: 2rem;
+}
+
+.bn-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 40px rgba(90, 28, 53, 0.1);
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(201, 149, 108, 0.15);
+}
+
+.bn-card h3 {
+    color: var(--bordo, #5A1C35);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.codigo-display {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    color: var(--bordo, #5A1C35);
+    background: linear-gradient(135deg, #fff0ea, #fde8da);
+    border-radius: 12px;
+    padding: 0.8rem 1.5rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+.aguardando-msg {
+    color: var(--cor-gray, #76656D);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.dot-spinner { display: inline-flex; gap: 4px; }
+.dot-spinner span {
+    width: 6px; height: 6px;
+    background: var(--rose-gold, #C9956C);
+    border-radius: 50%;
+    animation: dotBounce 1.2s infinite;
+}
+.dot-spinner span:nth-child(2) { animation-delay: 0.2s; }
+.dot-spinner span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40%            { transform: scale(1);   opacity: 1;   }
+}
+
+/* ── Posicionamento ───────────────────────────────── */
+.bn-posicionamento {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.bn-posicionamento h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    color: var(--bordo, #5A1C35);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.posic-layout {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 2rem;
+    align-items: start;
+    margin-top: 1.5rem;
+}
+
+/* ── Tabuleiro (grade 10x10) ──────────────────────── */
+.tabuleiro-container { position: relative; }
+
+.tabuleiro-label {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--bordo, #5A1C35);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.tabuleiro {
+    display: grid;
+    grid-template-columns: 28px repeat(10, 1fr);
+    grid-template-rows: 28px repeat(10, 1fr);
+    gap: 2px;
+    width: 100%;
+    aspect-ratio: 11/11;
+    user-select: none;
+}
+
+.tab-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--cor-gray, #76656D);
+}
+
+.tab-celula {
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    aspect-ratio: 1;
+    border: 1px solid rgba(201, 149, 108, 0.2);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.tab-celula:hover { background: rgba(201, 149, 108, 0.2); transform: scale(1.05); }
+.tab-celula.navio { background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46); border-color: transparent; }
+.tab-celula.preview { background: rgba(201, 149, 108, 0.4); border-color: var(--rose-gold, #C9956C); }
+.tab-celula.preview-invalido { background: rgba(220, 53, 69, 0.3); border-color: #dc3545; }
+
+/* Tabuleiro do adversário (ataque) */
+.tab-celula.acerto {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    border-color: transparent;
+    animation: hitPulse 0.5s ease;
+}
+.tab-celula.erro {
+    background: rgba(100, 130, 200, 0.5);
+    border-color: rgba(100, 130, 200, 0.7);
+}
+.tab-celula.afundado { background: linear-gradient(135deg, #1a0a12, #3d1224); border-color: transparent; }
+.tab-celula.navio-proprio { background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46); }
+.tab-celula.navio-proprio.acerto { background: linear-gradient(135deg, #dc2626, #ef4444); }
+
+.tab-celula .celula-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    pointer-events: none;
+}
+
+@keyframes hitPulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* ── Painel de navios (sidebar) ───────────────────── */
+.navios-panel {
+    background: white;
+    border-radius: 16px;
+    padding: 1.2rem;
+    box-shadow: 0 4px 20px rgba(90,28,53,0.08);
+    border: 1px solid rgba(201, 149, 108, 0.15);
+    position: sticky;
+    top: 80px;
+}
+
+.navios-panel h4 {
+    color: var(--bordo, #5A1C35);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+}
+
+.navio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    margin-bottom: 0.4rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    background: rgba(253, 248, 245, 0.8);
+}
+
+.navio-item:hover { background: rgba(201, 149, 108, 0.15); }
+.navio-item.selecionado { border-color: var(--bordo, #5A1C35); background: rgba(90, 28, 53, 0.08); }
+.navio-item.posicionado { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+
+.navio-visual {
+    display: flex;
+    gap: 2px;
+}
+
+.navio-quadrado {
+    width: 14px; height: 14px;
+    background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46);
+    border-radius: 3px;
+}
+
+.navio-info { flex: 1; }
+.navio-info .nome { font-size: 0.8rem; font-weight: 600; color: var(--bordo, #5A1C35); }
+.navio-info .tamanho { font-size: 0.7rem; color: var(--cor-gray, #76656D); }
+
+.navio-contagem {
+    font-size: 0.7rem;
+    background: var(--bordo, #5A1C35);
+    color: white;
+    border-radius: 99px;
+    padding: 0.1rem 0.4rem;
+    font-weight: 700;
+}
+
+/* ── Controles de posicionamento ──────────────────── */
+.posic-controles {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 0.8rem;
+}
+
+.btn-rotacionar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--bordo, #5A1C35);
+    border-radius: 10px;
+    background: white;
+    color: var(--bordo, #5A1C35);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-rotacionar:hover { background: var(--bordo, #5A1C35); color: white; }
+
+/* ── Fase Batalha ─────────────────────────────────── */
+.bn-batalha {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.batalha-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(90,28,53,0.08);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.turno-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.turno-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--bordo, #5A1C35);
+    animation: pulseDot 1.5s ease infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.4); opacity: 0.6; }
+}
+
+.batalha-campos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.campo-wrapper { }
+.campo-titulo {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--bordo, #5A1C35);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+}
+.campo-wrapper.meu-turno .campo-titulo { color: var(--rose-gold-dark, #a87850); }
+.campo-inimigo { cursor: crosshair; }
+.campo-inimigo .tab-celula:not(.acerto):not(.erro):not(.afundado):hover {
+    background: rgba(220, 53, 69, 0.2);
+    border-color: rgba(220, 53, 69, 0.5);
+}
+
+/* ── Log de jogadas ───────────────────────────────── */
+.log-jogadas {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(90,28,53,0.06);
+    margin-top: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.log-jogadas h5 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--bordo, #5A1C35);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+.log-entrada {
+    font-size: 0.8rem;
+    color: var(--cor-gray, #76656D);
+    padding: 0.2rem 0;
+    border-bottom: 1px solid rgba(201,149,108,0.1);
+    animation: fadeSlideIn 0.3s ease;
+}
+.log-entrada:last-child { border-bottom: none; }
+.log-entrada.acerto-log { color: #dc2626; font-weight: 600; }
+.log-entrada.afundado-log { color: var(--bordo, #5A1C35); font-weight: 700; }
+
+/* ── Navios afundados (batalha) ───────────────────── */
+.navios-afundados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+}
+.navio-afundado-badge {
+    background: rgba(90, 28, 53, 0.1);
+    color: var(--bordo, #5A1C35);
+    padding: 0.2rem 0.5rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* ── Tela de Vitória ──────────────────────────────── */
+.bn-vitoria {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.vitoria-emoji {
+    font-size: 5rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.bn-vitoria h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    color: var(--bordo, #5A1C35);
+    margin-bottom: 0.5rem;
+}
+
+.vitoria-sub {
+    color: var(--cor-gray, #76656D);
+    margin-bottom: 2rem;
+}
+
+.vitoria-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.vitoria-stat-item {
+    background: rgba(253,248,245,0.9);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(201,149,108,0.2);
+}
+.vitoria-stat-item .val {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--bordo, #5A1C35);
+    display: block;
+}
+.vitoria-stat-item .lbl {
+    font-size: 0.7rem;
+    color: var(--cor-gray, #76656D);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ── Mensagens toast ──────────────────────────────── */
+.bn-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 99px;
+    box-shadow: 0 8px 30px rgba(90,28,53,0.2);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--bordo, #5A1C35);
+    border: 1px solid rgba(201,149,108,0.3);
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+.bn-toast.visivel { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ── Botões do jogo ───────────────────────────────── */
+.btn-jogo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.8rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+}
+
+.btn-jogo-primario {
+    background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46);
+    color: white;
+    box-shadow: 0 4px 16px rgba(90,28,53,0.3);
+}
+.btn-jogo-primario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(90,28,53,0.4);
+    color: white;
+}
+
+.btn-jogo-secundario {
+    background: transparent;
+    color: var(--bordo, #5A1C35);
+    border: 2px solid rgba(90,28,53,0.3);
+}
+.btn-jogo-secundario:hover {
+    background: rgba(90,28,53,0.06);
+    border-color: var(--bordo, #5A1C35);
+    color: var(--bordo, #5A1C35);
+}
+
+/* ── Input estilizado ─────────────────────────────── */
+.input-jogo {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid rgba(201,149,108,0.3);
+    border-radius: 12px;
+    font-size: 1rem;
+    background: rgba(253,248,245,0.8);
+    color: var(--dark, #1A0A12);
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 0.8rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.input-jogo:focus { border-color: var(--bordo, #5A1C35); background: white; }
+
+/* ── Corações decorativos ─────────────────────────── */
+.coracao-deco {
+    position: fixed;
+    pointer-events: none;
+    font-size: 1.2rem;
+    animation: coracaoFly 4s ease-out forwards;
+    z-index: 9998;
+}
+
+@keyframes coracaoFly {
+    0%   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(-120px) scale(1.5) rotate(30deg); }
+}
+
+/* ── Animação float genérica ──────────────────────── */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+
+/* ── Confetes ─────────────────────────────────────── */
+.confete {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confeteFall 3s ease-out forwards;
+    z-index: 9997;
+    pointer-events: none;
+}
+@keyframes confeteFall {
+    0%   { opacity: 1; transform: translateY(-10px) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+}
+
+/* ── Responsivo ───────────────────────────────────── */
+@media (max-width: 768px) {
+    .posic-layout { grid-template-columns: 1fr; }
+    .navios-panel { position: static; }
+    .batalha-campos { grid-template-columns: 1fr; }
+    .vitoria-stats { grid-template-columns: 1fr; }
+    .bn-lobby h1 { font-size: 1.8rem; }
+    .codigo-display { font-size: 2rem; }
+    .jogos-hero h1 { font-size: 2rem; }
+    .stats-hub { gap: 1rem; }
+    .batalha-header { justify-content: center; }
+}

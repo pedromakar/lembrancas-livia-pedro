@@ -1,0 +1,112 @@
+<%- include('../layout', { body: ` 
+<link rel="stylesheet" href="/css/jogos.css">
+
+<div class="jogos-hero">
+    <h1>🎮 Jogos</h1>
+    <p>Hora de competir! Quem vai ganhar hoje? 💕</p>
+</div>
+
+<!-- Estatísticas Gerais -->
+<% if (resumo.totalPartidas > 0) { %>
+<div class="stats-hub">
+    <div class="stat-item">
+        <span class="stat-valor"><%= resumo.totalPartidas %></span>
+        <span class="stat-label">Partidas Jogadas</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-valor">👑 <%= resumo.vitoriasPedro %></span>
+        <span class="stat-label">Vitórias Pedro</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-valor">👑 <%= resumo.vitoriasLivia %></span>
+        <span class="stat-label">Vitórias Lívia</span>
+    </div>
+    <% if (resumo.melhorSequenciaAcertos.sequencia > 0) { %>
+    <div class="stat-item">
+        <span class="stat-valor">🔥 <%= resumo.melhorSequenciaAcertos.sequencia %></span>
+        <span class="stat-label">Melhor Sequência (<%= resumo.melhorSequenciaAcertos.jogador %>)</span>
+    </div>
+    <% } %>
+</div>
+<% } %>
+
+<!-- Grade de Jogos -->
+<div class="jogos-grid">
+    <!-- Batalha Naval -->
+    <div class="jogo-card">
+        <span class="jogo-emoji">⚓</span>
+        <h2>Batalha Naval</h2>
+        <p>
+            O clássico jogo de estratégia em tempo real!
+            Posicione seus navios e afunde a frota do adversário
+            antes que ele afunde a sua. Quem tem melhor mira?
+        </p>
+        <% const bn = resumo.totalPartidas > 0 ? (resumo.vitoriasPedro > resumo.vitoriasLivia ? 'Pedro lidera! 👑' : resumo.vitoriasLivia > resumo.vitoriasPedro ? 'Lívia lidera! 👑' : 'Empate! 🤝') : 'Ninguém jogou ainda!' %>
+        <p style="font-size:0.8rem; color: var(--rose-gold-dark); font-weight:600; margin-bottom:1rem;">
+            <%= bn %>
+        </p>
+        <a href="/jogos/batalha-naval" class="btn-jogo btn-jogo-primario">
+            ⚓ Jogar Agora
+        </a>
+    </div>
+
+    <!-- Em Breve: Jogo da Velha -->
+    <div class="jogo-card" style="opacity:0.65;">
+        <span class="jogo-emoji">❌</span>
+        <h2>Jogo da Velha</h2>
+        <p>
+            O clássico de sempre! Simples, rápido e divertido.
+            Mostre que você é o/a mais esperto/a.
+        </p>
+        <span class="badge-em-breve">🚧 Em Breve</span>
+    </div>
+
+    <!-- Em Breve: Quiz do Casal -->
+    <div class="jogo-card" style="opacity:0.65;">
+        <span class="jogo-emoji">💌</span>
+        <h2>Quiz do Casal</h2>
+        <p>
+            Será que vocês se conhecem de verdade?
+            Perguntas especiais só sobre vocês dois!
+        </p>
+        <span class="badge-em-breve">🚧 Em Breve</span>
+    </div>
+
+    <!-- Em Breve: Forca -->
+    <div class="jogo-card" style="opacity:0.65;">
+        <span class="jogo-emoji">🔤</span>
+        <h2>Forca</h2>
+        <p>
+            Adivinhe a palavra antes que seja tarde!
+            Com temática especial para vocês.
+        </p>
+        <span class="badge-em-breve">🚧 Em Breve</span>
+    </div>
+</div>
+
+<!-- Histórico das Últimas Partidas -->
+<% if (ultimasPartidas.length > 0) { %>
+<div style="margin-top: 1rem;">
+    <h3 style="color: var(--bordo); margin-bottom: 1rem; font-size: 1.2rem;">
+        📜 Últimas Partidas
+    </h3>
+    <ul class="historico-lista">
+        <% ultimasPartidas.forEach(p => { 
+            const data = new Date(p.data);
+            const dataStr = data.toLocaleDateString('pt-BR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+        %>
+        <li class="historico-item">
+            <span class="winner-badge">⚓ Batalha Naval</span>
+            <span>🏆 <strong><%= p.vencedor %></strong> venceu <%= p.perdedor %></span>
+            <% if (p.duracaoSegundos) { %>
+            <span style="font-size:0.75rem; color: var(--cor-gray);">
+                ⏱ <%= Math.floor(p.duracaoSegundos / 60) %>m<%= p.duracaoSegundos % 60 %>s
+            </span>
+            <% } %>
+            <span class="data-str"><%= dataStr %></span>
+        </li>
+        <% }) %>
+    </ul>
+</div>
+<% } %>
+` }) %>

@@ -1,10 +1,14 @@
 require('dotenv').config();
-const express = require('express');
-const path = require('path');
+const express    = require('express');
+const http       = require('http');
+const { Server } = require('socket.io');
+const path       = require('path');
 const bodyParser = require('body-parser');
-const session = require('express-session');
+const session    = require('express-session');
 
-const app = express();
+const app    = express();
+const server = http.createServer(app);  // Servidor HTTP nativo (necessário para Socket.io)
+const io     = new Server(server);      // Socket.io montado no mesmo servidor
 
 // ========== CONFIGURAÇÕES ==========
 app.set('view engine', 'ejs');
@@ -16,15 +20,13 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: 'seu-super-secret-key',
+  secret: process.env.SESSION_SECRET || 'seu-super-secret-key',
   resave: false,
   saveUninitialized: true
 }));
 
-// ========== ROTAS ==========
-// Adicionando uma camada de segurança (Senha para entrar no site)
+// ========== SEGURANÇA — Senha de acesso ao site ==========
 app.use((req, res, next) => {
-  // Pega o usuário e senha do .env, ou usa 'amor' e '1234' como padrão
   const user = process.env.SITE_USER || 'amor';
   const pass = process.env.SITE_PASSWORD || '1234';
 
@@ -39,11 +41,18 @@ app.use((req, res, next) => {
   res.status(401).send('Acesso Negado. Este é um local privado! ❤️');
 });
 
+// ========== ROTAS ==========
 const rotasPrincipal = require('./routes/principal');
-const rotasCartas = require('./routes/cartas');
+const rotasCartas    = require('./routes/cartas');
+const rotasJogos     = require('./routes/jogos');
 
 app.use('/', rotasPrincipal);
 app.use('/cartas', rotasCartas);
+app.use('/jogos', rotasJogos);
+
+// ========== GAME ENGINE — Socket.io ==========
+const batalhaNaval = require('./game-engine/batalha-naval');
+batalhaNaval.inicializar(io);
 
 // ========== TRATAMENTO DE ERROS ==========
 app.use((req, res) => {
@@ -52,8 +61,9 @@ app.use((req, res) => {
 
 // ========== INICIA SERVIDOR ==========
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🎁 Servidor rodando em http://localhost:${PORT}`);
+  console.log('🎮 Socket.io ativo para Batalha Naval');
   console.log('Aperte Ctrl+C para parar');
 });
 
