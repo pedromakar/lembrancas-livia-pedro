@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const el = document.getElementById(`tab-pos-${ll}-${cc}`);
                             if (el) { el.classList.add('navio'); el.dataset.navioId = id; }
                         });
-                        estado.naviosPosicionados.push({ id, nome: cfg.nome, emoji: cfg.emoji, tamanho: cfg.tamanho, linha: l, coluna: c, horizontal: horiz });
+                        estado.naviosPosicionados.push({ id, nome: cfg.nome, icone: cfg.icone, tamanho: cfg.tamanho, linha: l, coluna: c, horizontal: horiz });
                         posicionado = true;
                     }
                 }
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     icon.textContent = '💀';
                     AudioJogo.afundado();
                     toast(msgAleatoria(mensagensAfundado), 3500);
-                    addLog(`${estado.meuNome}: afundou o ${navioAfundado.emoji} ${navioAfundado.nome}!`, 'afundado-log');
+                    addLog(`${estado.meuNome}: afundou o ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');
                     adicionarNavioAfundadoAdversario(navioAfundado);
                     voeCoracao(window.innerWidth / 2, window.innerHeight / 2);
                 } else if (acertou) {
@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (navioAfundado) {
                     el.classList.add('acerto');
                     icon.textContent = '💀';
-                    addLog(`${estado.adversarioNome}: afundou seu ${navioAfundado.emoji} ${navioAfundado.nome}!`, 'afundado-log');
+                    addLog(`${estado.adversarioNome}: afundou seu ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');
                 } else if (acertou) {
                     el.classList.add('acerto');
                     icon.textContent = '💥';
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!container) return;
         const badge = document.createElement('span');
         badge.className = 'navio-afundado-badge';
-        badge.textContent = `${navio.emoji} ${navio.nome}`;
+        badge.innerHTML = `${navio.icone} ${navio.nome}`;
         container.appendChild(badge);
     }
 
@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (el) {
                     el.classList.add('navio-proprio');
                     if (i === meio) {
-                        el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.emoji}</span>`;
+                        el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.icone}</span>`;
                     }
                 }
             }
@@ -551,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${Array.from({ length: cfg.tamanho }, () => '<div class="navio-quadrado"></div>').join('')}
                         </div>
                         <div class="navio-info">
-                            <div class="nome">${cfg.emoji} ${cfg.nome}</div>
+                            <div class="nome">${cfg.icone} ${cfg.nome}</div>
                             <div class="tamanho">${cfg.tamanho} casas</div>
                         </div>
                     `;
@@ -560,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         AudioJogo.click();
                         document.querySelectorAll('.navio-item').forEach(i => i.classList.remove('selecionado'));
                         item.classList.add('selecionado');
-                        estado.navioSelecionado = { id, tamanho: cfg.tamanho, nome: cfg.nome, emoji: cfg.emoji };
+                        estado.navioSelecionado = { id, tamanho: cfg.tamanho, nome: cfg.nome, icone: cfg.icone };
                     });
                     painel.appendChild(item);
                 }

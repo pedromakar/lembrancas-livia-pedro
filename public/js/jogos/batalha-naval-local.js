@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // ── Configuração de Navios (Igual ao backend) ──
     const NAVIOS_CONFIG = [
-        { nome: 'Porta-aviões', tamanho: 5, quantidade: 1, emoji: '🚢' },
-        { nome: 'Cruzador',     tamanho: 4, quantidade: 1, emoji: '⛴️' },
-        { nome: 'Destroyer',    tamanho: 3, quantidade: 2, emoji: '🛥️' },
-        { nome: 'Submarino',    tamanho: 2, quantidade: 2, emoji: '🤿' },
+        { nome: 'Porta-aviões', tamanho: 5, quantidade: 1, icone: '<i class="fa-solid fa-ship" style="color: white;"></i>' },
+        { nome: 'Cruzador',     tamanho: 4, quantidade: 1, icone: '<i class="fa-solid fa-anchor" style="color: white;"></i>' },
+        { nome: 'Destroyer',    tamanho: 3, quantidade: 2, icone: '<i class="fa-solid fa-sailboat" style="color: white;"></i>' },
+        { nome: 'Submarino',    tamanho: 2, quantidade: 2, icone: '<i class="fa-solid fa-water" style="color: white;"></i>' },
     ];
     const totalNavios = NAVIOS_CONFIG.reduce((s, n) => s + n.quantidade, 0);
 
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.innerHTML = `
                     <div class="navio-visual">${Array.from({length: cfg.tamanho}, ()=> '<div class="navio-quadrado"></div>').join('')}</div>
                     <div class="navio-info">
-                        <div class="nome">${cfg.emoji} ${cfg.nome}</div>
+                        <div class="nome">${cfg.icone} ${cfg.nome}</div>
                         <div class="tamanho">${cfg.tamanho} casas</div>
                     </div>
                 `;
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     AudioJogo.click();
                     document.querySelectorAll('.navio-item').forEach(i => i.classList.remove('selecionado'));
                     item.classList.add('selecionado');
-                    estado.navioSelecionado = { id, tamanho: cfg.tamanho, nome: cfg.nome, emoji: cfg.emoji };
+                    estado.navioSelecionado = { id, tamanho: cfg.tamanho, nome: cfg.nome, icone: cfg.icone };
                 });
                 painel.appendChild(item);
             }
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (celulas.every(([ll, cc]) => ll>=0 && ll<10 && cc>=0 && cc<10 && jogador.tab[ll][cc].navio === null)) {
                         const id = `${cfg.tamanho}-${q}`;
                         celulas.forEach(([ll, cc]) => jogador.tab[ll][cc].navio = id);
-                        jogador.navios.push({ id, nome: cfg.nome, emoji: cfg.emoji, tamanho: cfg.tamanho, linha: l, coluna: c, horizontal: horiz });
+                        jogador.navios.push({ id, nome: cfg.nome, icone: cfg.icone, tamanho: cfg.tamanho, linha: l, coluna: c, horizontal: horiz });
                         posicionado = true;
                     }
                 }
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cells.forEach(([ll, cc], idx) => {
                 const el = document.getElementById(`tab-pos-${ll}-${cc}`);
                 el.classList.add('navio');
-                if (idx === meio) el.innerHTML = `<span style="font-size: 1.2rem;">${navio.emoji}</span>`;
+                if (idx === meio) el.innerHTML = `<span style="font-size: 1.2rem;">${navio.icone}</span>`;
             });
         });
         document.getElementById('btn-confirmar-posicao').disabled = false;
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function clickPos(l, c) {
         if (!estado.navioSelecionado) return;
         const jogador = estado.jogadorSetupAtual === 1 ? estado.p1 : estado.p2;
-        const { tamanho, id, nome, emoji } = estado.navioSelecionado;
+        const { tamanho, id, nome, icone } = estado.navioSelecionado;
         const celulas = getCelulasNavio(l, c, tamanho, estado.horizontal);
         
         if (!celulas.every(([ll, cc]) => ll>=0 && ll<10 && cc>=0 && cc<10 && jogador.tab[ll][cc].navio === null)) {
@@ -240,9 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
             jogador.tab[ll][cc].navio = id;
             const el = document.getElementById(`tab-pos-${ll}-${cc}`);
             el.classList.add('navio');
-            if (index === meio) el.innerHTML = `<span style="font-size: 1.2rem;">${emoji}</span>`;
+            if (index === meio) el.innerHTML = `<span style="font-size: 1.2rem;">${icone}</span>`;
         });
-        jogador.navios.push({ id, nome, emoji, tamanho, linha: l, coluna: c, horizontal: estado.horizontal });
+        jogador.navios.push({ id, nome, icone, tamanho, linha: l, coluna: c, horizontal: estado.horizontal });
         
         estado.navioSelecionado = null;
         limparPreview();
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cells.forEach(([ll, cc], idx) => {
                 const el = document.getElementById(`tab-meu-${ll}-${cc}`);
                 el.classList.add('navio-proprio');
-                if (idx === meio) el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.emoji}</span>`;
+                if (idx === meio) el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.icone}</span>`;
                 
                 // Se foi atingido pelo inimigo
                 if (jAtual.tab[ll][cc].atingido) {
@@ -369,11 +369,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const myCont = document.getElementById('navios-afundados-eu');
         myCont.innerHTML = '';
-        jAtual.naviosAfundados.forEach(n => myCont.innerHTML += `<span class="navio-afundado-badge">${n.emoji} ${n.nome}</span>`);
+        jAtual.naviosAfundados.forEach(n => myCont.innerHTML += `<span class="navio-afundado-badge">${n.icone} ${n.nome}</span>`);
         
         const advCont = document.getElementById('navios-afundados-adv');
         advCont.innerHTML = '';
-        adv.naviosAfundados.forEach(n => advCont.innerHTML += `<span class="navio-afundado-badge">${n.emoji} ${n.nome}</span>`);
+        adv.naviosAfundados.forEach(n => advCont.innerHTML += `<span class="navio-afundado-badge">${n.icone} ${n.nome}</span>`);
     }
 
     function iniciarTurnoBatalha() {
@@ -416,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (afundou) {
                 AudioJogo.afundado();
                 adv.naviosAfundados.push(navioCfg);
-                addLog(`${jAtual.nome} afundou o ${navioCfg.emoji} ${navioCfg.nome} de ${adv.nome}!`, 'afundado-log');
+                addLog(`${jAtual.nome} afundou o ${navioCfg.icone} ${navioCfg.nome} de ${adv.nome}!`, 'afundado-log');
                 toast(msgsAfundado[Math.floor(Math.random()*msgsAfundado.length)], 4000);
                 
                 // Caveira em todas as partes do navio

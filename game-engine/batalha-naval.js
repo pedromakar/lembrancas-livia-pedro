@@ -9,10 +9,10 @@ const jogosService = require('../services/jogosService');
 
 // ---- Configuração dos navios ----
 const NAVIOS_CONFIG = [
-    { nome: 'Porta-aviões', tamanho: 5, quantidade: 1, emoji: '🚢' },
-    { nome: 'Cruzador',     tamanho: 4, quantidade: 1, emoji: '⛴️' },
-    { nome: 'Destroyer',    tamanho: 3, quantidade: 2, emoji: '🛥️' },
-    { nome: 'Submarino',    tamanho: 2, quantidade: 2, emoji: '🤿' },
+    { nome: 'Porta-aviões', tamanho: 5, quantidade: 1, icone: '<i class="fa-solid fa-ship" style="color: white;"></i>' },
+    { nome: 'Cruzador',     tamanho: 4, quantidade: 1, icone: '<i class="fa-solid fa-anchor" style="color: white;"></i>' },
+    { nome: 'Destroyer',    tamanho: 3, quantidade: 2, icone: '<i class="fa-solid fa-sailboat" style="color: white;"></i>' },
+    { nome: 'Submarino',    tamanho: 2, quantidade: 2, icone: '<i class="fa-solid fa-water" style="color: white;"></i>' },
 ];
 
 const TAMANHO_TABULEIRO = 10;
