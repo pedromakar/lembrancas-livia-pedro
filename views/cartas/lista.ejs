@@ -13,9 +13,9 @@
     <style>
         body { background: var(--marfim); }
 
-        /* ══════════════════════════════════════════════
+        /* ══════════════════════════════════════════
            HERO
-        ══════════════════════════════════════════════ */
+        ══════════════════════════════════════════ */
         .cartas-hero {
             background: linear-gradient(160deg, #1a0a12 0%, #2b1019 50%, #3d1830 100%);
             color: var(--marfim);
@@ -31,289 +31,213 @@
             background: radial-gradient(ellipse at 70% 40%, rgba(201,149,108,0.1) 0%, transparent 65%);
         }
         .hero-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--rose-gold), transparent); margin: 0 auto 1.5rem; }
-        .cartas-hero h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(2.8rem, 7vw, 4.5rem);
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            position: relative;
-        }
+        .cartas-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 7vw, 4.5rem); font-weight: 600; letter-spacing: -0.02em; position: relative; }
         .cartas-hero p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: var(--rose-gold); margin-top: 0.5rem; position: relative; }
 
-        /* ══════════════════════════════════════════════
-           GRID DE ENVELOPES
-        ══════════════════════════════════════════════ */
+        /* ══════════════════════════════════════════
+           GRID
+        ══════════════════════════════════════════ */
         .cartas-grid {
             max-width: 1100px;
             margin: 3rem auto;
             padding: 0 1.5rem 5rem;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2.5rem;
+            gap: 3rem 2rem;
         }
 
-        /* ══════════════════════════════════════════════
+        /* ══════════════════════════════════════════
            ENVELOPE 3D
-        ══════════════════════════════════════════════ */
+        ══════════════════════════════════════════ */
         .envelope-scene {
-            perspective: 800px;
-            width: 100%;
+            perspective: 900px;
         }
 
         .envelope-wrapper {
             position: relative;
             width: 100%;
-            padding-bottom: 72%; /* proporção envelope */
+            padding-bottom: 70%;
             cursor: pointer;
-            transform-style: preserve-3d;
         }
 
         .envelope {
             position: absolute;
             inset: 0;
             transform-style: preserve-3d;
-            transition: transform 0.3s ease;
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            filter: drop-shadow(0 10px 28px rgba(90,28,53,0.22));
         }
-        .envelope:hover { transform: translateY(-6px) scale(1.02); }
-        .envelope:hover .envelope-shadow { box-shadow: 0 30px 60px rgba(90,28,53,0.35); }
+        .envelope:hover { transform: translateY(-8px) scale(1.03); filter: drop-shadow(0 20px 40px rgba(90,28,53,0.32)); }
+        .envelope.abrindo { pointer-events: none; }
 
-        /* Sombra suave abaixo */
-        .envelope-shadow {
-            position: absolute;
-            bottom: -10px;
-            left: 5%;
-            right: 5%;
-            height: 20px;
-            background: radial-gradient(ellipse, rgba(90,28,53,0.22) 0%, transparent 70%);
-            transition: all 0.4s ease;
-            pointer-events: none;
-        }
-
-        /* ── CORPO DO ENVELOPE ── */
+        /* ── Corpo ── */
         .envelope-body {
             position: absolute;
             inset: 0;
-            background: #f5efe6;
-            border-radius: 4px;
+            background: linear-gradient(175deg, #f7f0e6 60%, #ede3d4 100%);
+            border-radius: 5px;
+            border: 1px solid rgba(180,140,100,0.35);
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(90,28,53,0.18), inset 0 0 0 1px rgba(180,140,100,0.3);
         }
 
-        /* Triângulos internos decorativos (linhas diagonais do envelope) */
-        .envelope-body::before,
-        .envelope-body::after {
-            content: '';
+        /* Triângulos internos decorativos */
+        .env-tri-left, .env-tri-right, .env-tri-bottom {
             position: absolute;
             bottom: 0;
             width: 0;
             height: 0;
+            pointer-events: none;
         }
-        /* Triângulo esquerdo */
-        .envelope-body::before {
-            left: 0;
-            border-style: solid;
-            border-width: 0 0 55% 50%;
-            border-color: transparent transparent #e8ddd0 transparent;
-        }
-        /* Triângulo direito */
-        .envelope-body::after {
-            right: 0;
-            border-style: solid;
-            border-width: 0 50% 55% 0;
-            border-color: transparent #e8ddd0 transparent transparent;
+        .env-tri-left  { left: 0; border: solid transparent; border-bottom-color: #e5d8c5; border-width: 0 0 52% 50%; }
+        .env-tri-right { right: 0; border: solid transparent; border-bottom-color: #e5d8c5; border-width: 0 50% 52% 0; }
+
+        /* Listra airmail */
+        .env-airmail {
+            position: absolute;
+            inset: 0;
+            border: 5px solid transparent;
+            border-image: repeating-linear-gradient(90deg, #5a1c35 0px, #5a1c35 14px, transparent 14px, transparent 22px) 1;
+            opacity: 0.55;
+            border-radius: 5px;
         }
 
-        /* Listra estilo airmail */
-        .envelope-airmail {
+        /* Carimbo */
+        .env-stamp {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
-            background: repeating-linear-gradient(
-                90deg,
-                #5a1c35 0px, #5a1c35 12px,
-                #fff 12px, #fff 18px
-            );
-            opacity: 0.6;
-        }
-
-        /* Carimbo decorativo */
-        .envelope-stamp {
-            position: absolute;
-            top: 12px;
-            right: 14px;
-            width: 44px;
-            height: 52px;
+            top: 10px;
+            right: 12px;
+            width: 48px;
+            height: 56px;
             background: white;
             border: 2px solid #c9956c;
             border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 1px 1px 4px rgba(0,0,0,0.15);
             z-index: 4;
-            /* borda serrilhada tipo carimbo */
-            background-image: radial-gradient(circle, transparent 3px, white 3px);
-            background-size: 8px 8px;
-            background-position: -4px -4px;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.12);
+            /* serrilhado */
+            mask-image: radial-gradient(circle at 4px 4px, transparent 4px, black 4px);
+            mask-size: 8px 8px;
         }
-        .envelope-stamp-inner {
-            background: white;
-            width: 36px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            border-radius: 2px;
-        }
+        .env-stamp span { font-size: 1.6rem; }
 
-        /* Lacre de cera no centro */
-        .envelope-seal {
+        /* Lacre */
+        .env-seal {
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 52px;
-            height: 52px;
-            background: radial-gradient(circle at 35% 35%, #8b2040, #5a1c35 60%, #3d1220);
+            width: 58px; height: 58px;
+            background: radial-gradient(circle at 35% 30%, #9b2547, #5a1c35 55%, #3d1220);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 12px rgba(90,28,53,0.5), inset 0 2px 4px rgba(255,255,255,0.2);
-            z-index: 4;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            z-index: 5;
+            box-shadow: 0 4px 14px rgba(90,28,53,0.55), inset 0 2px 5px rgba(255,255,255,0.15);
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
-        .envelope.aberto .envelope-seal {
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-        }
+        .envelope.abrindo .env-seal,
+        .envelope.aberto  .env-seal { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 
-        /* Título e data impressos no corpo */
-        .envelope-label {
+        /* Título no corpo */
+        .env-label {
             position: absolute;
-            bottom: 20%;
-            left: 0;
-            right: 0;
+            bottom: 16%;
+            left: 0; right: 0;
             text-align: center;
             z-index: 3;
-            padding: 0 1rem;
+            padding: 0 1.2rem;
             transition: opacity 0.3s ease;
         }
-        .envelope.aberto .envelope-label { opacity: 0; }
-
-        .label-titulo {
+        .envelope.abrindo .env-label,
+        .envelope.aberto  .env-label { opacity: 0; }
+        .env-label-titulo {
             font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(0.85rem, 2vw, 1.05rem);
+            font-size: clamp(0.82rem, 2.2vw, 1.05rem);
             font-weight: 600;
             color: #5a1c35;
             line-height: 1.3;
-            margin-bottom: 0.2rem;
         }
-        .label-data {
-            font-size: 0.65rem;
+        .env-label-data {
+            font-size: 0.62rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
             color: #c9956c;
+            margin-top: 0.2rem;
         }
 
-        /* ── ABA DO ENVELOPE (FLAP) ── */
-        .envelope-flap {
+        /* Papel interno que sobe ao abrir */
+        .env-paper {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
+            bottom: 0; left: 6%; right: 6%;
+            height: 80%;
+            background: #fffdfb;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid rgba(201,149,108,0.2);
+            border-bottom: none;
+            z-index: 2;
+            transform: translateY(102%);
+            transition: transform 0s;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 -6px 20px rgba(90,28,53,0.1);
+        }
+        .envelope.abrindo .env-paper {
+            transform: translateY(20%);
+            transition: transform 0.6s 0.5s cubic-bezier(0.16,1,0.3,1);
+        }
+        .envelope.aberto .env-paper { transform: translateY(20%); }
+
+        .env-paper-preview {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            color: #5a1c35;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* ── ABA (FLAP) 3D ── */
+        .env-flap {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 52%;
             transform-origin: top center;
             transform-style: preserve-3d;
-            transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 5;
+            transition: transform 0.65s cubic-bezier(0.4,0,0.2,1);
+            z-index: 6;
         }
-        .envelope.aberto .envelope-flap {
-            transform: rotateX(-180deg);
-        }
+        .envelope.abrindo .env-flap,
+        .envelope.aberto  .env-flap { transform: rotateX(-175deg); }
 
-        /* Face frontal da aba (visível quando fechada) */
         .flap-front {
             position: absolute;
             inset: 0;
-            background: #ede4d5;
+            background: linear-gradient(175deg, #ede3d4, #e2d5c0);
             clip-path: polygon(0 0, 100% 0, 50% 100%);
             backface-visibility: hidden;
-            box-shadow: 0 4px 12px rgba(90,28,53,0.12);
-            border-top: 1px solid rgba(180,140,100,0.35);
+            border-top: 1px solid rgba(180,140,100,0.4);
             border-left: 1px solid rgba(180,140,100,0.2);
             border-right: 1px solid rgba(180,140,100,0.2);
         }
-        /* Face traseira da aba (visível quando aberta) */
         .flap-back {
             position: absolute;
             inset: 0;
-            background: #d9cfc0;
+            background: linear-gradient(175deg, #d5c9b5, #ccc0a8);
             clip-path: polygon(0 0, 100% 0, 50% 100%);
             backface-visibility: hidden;
             transform: rotateX(180deg);
         }
 
-        /* ── PAPEL INTERNO ── */
-        .envelope-paper {
+        /* Botões ação */
+        .env-actions {
             position: absolute;
-            bottom: 0;
-            left: 8%;
-            right: 8%;
-            height: 75%;
-            background: #fffdfb;
-            border-radius: 4px 4px 0 0;
-            z-index: 2;
-            transform: translateY(100%);
-            transition: transform 0s;
-            box-shadow: 0 -4px 20px rgba(90,28,53,0.12);
-            border: 1px solid rgba(201,149,108,0.2);
-            border-bottom: none;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .envelope.aberto .envelope-paper {
-            transform: translateY(28%);
-            transition: transform 0.55s 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .paper-content {
-            text-align: center;
-            padding: 1rem;
-        }
-        .paper-icon {
-            font-size: 1.6rem;
-            margin-bottom: 0.4rem;
-        }
-        .paper-titulo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            font-weight: 600;
-            color: var(--bordo);
-            line-height: 1.3;
-        }
-
-        /* ── BOTÕES AÇÃO ── */
-        .envelope-actions {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            display: flex;
-            gap: 4px;
+            top: 8px; left: 8px;
+            display: flex; gap: 4px;
             z-index: 10;
             opacity: 0;
             transition: opacity 0.2s;
         }
-        .envelope-scene:hover .envelope-actions { opacity: 1; }
-
+        .envelope-scene:hover .env-actions { opacity: 1; }
         .btn-acao-xs {
             padding: 0.2rem 0.5rem;
             font-size: 0.65rem;
@@ -329,64 +253,151 @@
         .btn-deletar-xs { border-color: rgba(220,80,80,0.3); color: #c0392b; }
         .btn-deletar-xs:hover { background: #c0392b; color: white; }
 
-        /* Hint de clique */
-        .envelope-hint {
+        /* Hint */
+        .env-hint {
             text-align: center;
-            margin-top: 0.75rem;
+            margin-top: 0.65rem;
             font-family: 'Inter', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--rose-gold-dark);
             letter-spacing: 0.08em;
-            opacity: 0.8;
-            transition: opacity 0.3s;
         }
-        .envelope.aberto ~ .envelope-hint { opacity: 0; }
 
-        /* ══════════════════════════════════════════════
-           MODAL LEITURA
-        ══════════════════════════════════════════════ */
-        .modal-leitura {
-            display: none;
+        /* ══════════════════════════════════════════
+           CARTA ABERTA — FULLSCREEN
+        ══════════════════════════════════════════ */
+        .carta-fullscreen {
             position: fixed;
             inset: 0;
-            background: rgba(20,8,14,0.9);
-            backdrop-filter: blur(16px);
-            z-index: var(--z-modal);
+            z-index: 9999;
+            display: flex;
             align-items: center;
             justify-content: center;
             padding: 1rem;
+            background: rgba(20,8,14,0);
+            opacity: 0;
+            pointer-events: none;
+            transition: background 0.5s ease, opacity 0.5s ease;
+            overflow-y: auto;
         }
-        .modal-leitura.show { display: flex; }
+        .carta-fullscreen.show {
+            background: rgba(20,8,14,0.88);
+            opacity: 1;
+            pointer-events: all;
+        }
 
-        .modal-papel {
+        /* O papel da carta aberta */
+        .carta-papel-aberto {
             background: #fffdfb;
-            border-radius: var(--radius-xl);
-            padding: 3rem 2.5rem;
             width: 100%;
-            max-width: 600px;
+            max-width: 660px;
+            border-radius: 16px;
+            padding: 3.5rem 3rem;
+            position: relative;
+            transform: translateY(80px) scale(0.88);
+            transition: transform 0.55s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 40px 120px rgba(0,0,0,0.45), 0 0 0 1px rgba(201,149,108,0.2);
+            /* Linhas de papel decorativas */
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 27px,
+                rgba(201,149,108,0.08) 27px,
+                rgba(201,149,108,0.08) 28px
+            );
+            background-attachment: local;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-xl);
-            animation: scaleIn 0.4s cubic-bezier(0.16,1,0.3,1);
-            border: 1px solid rgba(201,149,108,0.2);
-            position: relative;
         }
-        .papel-ornamento { text-align: center; font-size: 2rem; margin-bottom: 1.5rem; animation: heartBeat 2s ease-in-out infinite; }
-        .papel-data { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--rose-gold-dark); text-align: center; margin-bottom: 0.5rem; }
-        .papel-titulo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 600; color: var(--bordo); text-align: center; margin-bottom: 0.75rem; }
-        .papel-divider { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--rose-gold), transparent); margin: 1.5rem auto; }
-        .papel-corpo { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; line-height: 2; color: var(--dark-2); white-space: pre-wrap; }
-        .papel-assinar { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; color: var(--bordo); text-align: right; margin-top: 2rem; }
-        .btn-fechar-papel {
-            position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none;
-            font-size: 1.2rem; cursor: pointer; color: var(--cor-gray); transition: all var(--transition-fast);
-            width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        .carta-fullscreen.show .carta-papel-aberto {
+            transform: translateY(0) scale(1);
         }
-        .btn-fechar-papel:hover { background: var(--marfim-dark); color: var(--bordo); }
 
-        /* ══════════════════════════════════════════════
+        /* Furo de papel no topo (decorativo) */
+        .papel-furo {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px; height: 20px;
+            background: rgba(20,8,14,0.88);
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Botão fechar */
+        .btn-fechar-carta {
+            position: absolute;
+            top: 1.2rem; right: 1.2rem;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            background: var(--marfim-dark);
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            color: var(--bordo);
+            transition: all 0.2s;
+            font-weight: 700;
+        }
+        .btn-fechar-carta:hover { background: var(--bordo); color: white; transform: rotate(90deg); }
+
+        /* Conteúdo da carta */
+        .papel-ornamento {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .papel-data {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--rose-gold-dark);
+            text-align: center;
+            margin-bottom: 0.4rem;
+        }
+        .papel-titulo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 600;
+            color: var(--bordo);
+            text-align: center;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .papel-divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--rose-gold), transparent);
+            margin: 1.5rem auto;
+        }
+        .papel-corpo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.18rem;
+            line-height: 2.1;
+            color: var(--dark-2);
+            white-space: pre-wrap;
+        }
+        .papel-assinar {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--bordo);
+            text-align: right;
+            margin-top: 2.5rem;
+        }
+        .papel-footer-ornamento {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.4rem;
+            opacity: 0.5;
+        }
+
+        /* ══════════════════════════════════════════
            MODAL FORMULÁRIO
-        ══════════════════════════════════════════════ */
+        ══════════════════════════════════════════ */
         .modal-form-carta { display: none; position: fixed; inset: 0; background: rgba(20,8,14,0.82); backdrop-filter: blur(10px); z-index: calc(var(--z-modal) + 1); align-items: center; justify-content: center; padding: 1rem; }
         .modal-form-carta.show { display: flex; }
         .modal-form-conteudo { background: white; border-radius: var(--radius-xl); padding: 2.5rem; width: 100%; max-width: 580px; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-xl); animation: scaleIn 0.35s cubic-bezier(0.16,1,0.3,1); }
@@ -400,11 +411,11 @@
         .btn-fab { position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--bordo), var(--bordo-light)); color: white; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 6px 24px rgba(90,28,53,0.4); transition: all var(--transition-fast); z-index: 500; display: flex; align-items: center; justify-content: center; }
         .btn-fab:hover { transform: scale(1.1) rotate(45deg); box-shadow: 0 10px 32px rgba(90,28,53,0.55); }
 
-        .empty-cartas { text-align: center; padding: 5rem 2rem; }
+        .empty-cartas { text-align: center; padding: 5rem 2rem; grid-column: 1 / -1; }
 
         @media (max-width: 600px) {
-            .cartas-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .modal-papel { padding: 2rem 1.5rem; }
+            .cartas-grid { grid-template-columns: 1fr; }
+            .carta-papel-aberto { padding: 3rem 1.5rem; }
         }
     </style>
 </head>
@@ -439,7 +450,7 @@
                 <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Início</a></li>
                 <li class="nav-item"><a class="nav-link" href="/cartas"><i class="fas fa-envelope me-1"></i>Cartas</a></li>
                 <li class="nav-item">
-                    <a class="nav-link nav-link-highlight" href="/jogos" style="background: rgba(255, 255, 255, 0.25); border-radius: 20px; padding: 5px 15px !important; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                    <a class="nav-link" href="/jogos" style="background:rgba(255,255,255,0.25);border-radius:20px;padding:5px 15px !important;font-weight:bold;border:1px solid rgba(255,255,255,0.4);box-shadow:0 2px 8px rgba(0,0,0,0.15);">
                         <i class="fas fa-gamepad"></i> 🎮 Jogos
                     </a>
                 </li>
@@ -459,7 +470,7 @@
     <h1 class="animate-fadeInUp">Nossas Cartas</h1>
     <p class="animate-fadeInUp delay-2">Palavras que ficam para sempre</p>
     <div class="hero-line" style="margin-top:1.5rem;"></div>
-    <p class="animate-fadeInUp delay-3" style="color:rgba(253,248,245,0.45); font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; margin-top:1rem;">
+    <p class="animate-fadeInUp delay-3" style="color:rgba(253,248,245,0.45);font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;margin-top:1rem;">
         <%= cartas.length %> carta<%= cartas.length !== 1 ? 's' : '' %> escrita<%= cartas.length !== 1 ? 's' : '' %>
     </p>
 </header>
@@ -469,79 +480,65 @@
     <% if (cartas && cartas.length > 0) { %>
         <% cartas.forEach(function(carta, i) { %>
         <div class="reveal delay-<%= (i % 6) + 1 %>">
-            <!-- Cena do envelope (perspectiva) -->
             <div class="envelope-scene">
                 <div class="envelope-wrapper">
-                    <div class="envelope" id="env-<%= carta.id %>" onclick="abrirEnvelope(<%= carta.id %>)">
+                    <div class="envelope" id="env-<%= carta.id %>" onclick="clickEnvelope(<%= carta.id %>)">
 
-                        <!-- Corpo do envelope -->
+                        <!-- Corpo -->
                         <div class="envelope-body">
+                            <div class="env-tri-left"></div>
+                            <div class="env-tri-right"></div>
+                            <div class="env-airmail"></div>
 
-                            <!-- Listra airmail -->
-                            <div class="envelope-airmail"></div>
+                            <!-- Carimbo -->
+                            <div class="env-stamp"><span>💌</span></div>
 
-                            <!-- Carimbo decorativo -->
-                            <div class="envelope-stamp">
-                                <div class="envelope-stamp-inner">💌</div>
-                            </div>
-
-                            <!-- Botões de ação (editar/deletar) — aparecem no hover -->
-                            <div class="envelope-actions" onclick="event.stopPropagation()">
-                                <button class="btn-acao-xs btn-editar-xs" 
+                            <!-- Botões ação -->
+                            <div class="env-actions" onclick="event.stopPropagation()">
+                                <button class="btn-acao-xs btn-editar-xs"
                                     onclick="abrirModalEditar(<%= carta.id %>, this)"
                                     data-id="<%= carta.id %>"
                                     data-titulo="<%= carta.titulo %>"
                                     data-data="<%= carta.data || '' %>"
                                     data-conteudo="<%= (carta.conteudo || '').replace(/\"/g, '&quot;').replace(/\n/g, '&#10;') %>"
                                     data-autor="<%= carta.autor || '' %>"
-                                    title="Editar">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
+                                    title="Editar"><i class="fas fa-pencil-alt"></i></button>
                                 <form action="/cartas/deletar/<%= carta.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Excluir esta carta?')">
                                     <button type="submit" class="btn-acao-xs btn-deletar-xs" title="Excluir"><i class="fas fa-trash"></i></button>
                                 </form>
                             </div>
 
-                            <!-- Lacre de cera -->
-                            <div class="envelope-seal">❤️</div>
+                            <!-- Lacre -->
+                            <div class="env-seal">❤️</div>
 
-                            <!-- Título e data no corpo -->
-                            <div class="envelope-label">
-                                <div class="label-titulo"><%= carta.titulo %></div>
-                                <% if (carta.data) { %>
-                                <div class="label-data"><%= carta.data %></div>
-                                <% } %>
+                            <!-- Label -->
+                            <div class="env-label">
+                                <div class="env-label-titulo"><%= carta.titulo %></div>
+                                <% if (carta.data) { %><div class="env-label-data"><%= carta.data %></div><% } %>
                             </div>
 
-                            <!-- Papel interno que sobe ao abrir -->
-                            <div class="envelope-paper">
-                                <div class="paper-content">
-                                    <div class="paper-icon">✉️</div>
-                                    <div class="paper-titulo"><%= carta.titulo %></div>
-                                </div>
+                            <!-- Papel interno -->
+                            <div class="env-paper">
+                                <div class="env-paper-preview">✉️<br><small><%= carta.titulo %></small></div>
                             </div>
-
                         </div>
 
-                        <!-- Aba do envelope (flap 3D) -->
-                        <div class="envelope-flap">
+                        <!-- Aba (flap) 3D -->
+                        <div class="env-flap">
                             <div class="flap-front"></div>
                             <div class="flap-back"></div>
                         </div>
 
                     </div>
-                    <div class="envelope-shadow"></div>
                 </div>
-
-                <!-- Dica de interação -->
-                <div class="envelope-hint">✨ Clique para abrir</div>
+                <div class="env-hint">💌 Toque para abrir</div>
             </div>
         </div>
         <% }) %>
     <% } else { %>
-        <div class="empty-cartas" style="grid-column:1/-1;">
-            <div style="font-size:3.5rem; margin-bottom:1rem;">💌</div>
-            <p style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-style:italic; color:var(--cor-gray);">
+        <div class="empty-cartas">
+            <div style="font-size:3.5rem;margin-bottom:1rem;">💌</div>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--cor-gray);">
                 As primeiras cartas ainda vão ser escritas...
             </p>
         </div>
@@ -554,16 +551,23 @@
 <!-- FAB -->
 <button class="btn-fab" id="btnFab" title="Escrever Carta">✏️</button>
 
-<!-- MODAL LEITURA DA CARTA -->
-<div class="modal-leitura" id="modalLeitura">
-    <div class="modal-papel">
-        <button class="btn-fechar-papel" id="btnFecharPapel">✕</button>
-        <div class="papel-ornamento">💌</div>
-        <div class="papel-data" id="papelData"></div>
-        <div class="papel-titulo" id="papelTitulo"></div>
+<!-- ══ CARTA ABERTA FULLSCREEN ══ -->
+<div class="carta-fullscreen" id="cartaFullscreen" onclick="fecharCartaFullscreen(event)">
+    <div class="carta-papel-aberto" id="cartaPapelAberto">
+        <!-- Furo de papel decorativo -->
+        <div class="papel-furo"></div>
+
+        <!-- Botão fechar -->
+        <button class="btn-fechar-carta" id="btnFecharCarta" onclick="fecharCarta()">✕</button>
+
+        <!-- Conteúdo -->
+        <div class="papel-ornamento" id="papelOrnamento">💌</div>
+        <div class="papel-data"    id="papelData"></div>
+        <div class="papel-titulo"  id="papelTitulo"></div>
         <div class="papel-divider"></div>
-        <div class="papel-corpo" id="papelCorpo"></div>
+        <div class="papel-corpo"   id="papelCorpo"></div>
         <div class="papel-assinar" id="papelAssinar"></div>
+        <div class="papel-footer-ornamento">— ❤️ —</div>
     </div>
 </div>
 
@@ -588,15 +592,15 @@
                 <label class="form-label-p">Assinatura</label>
                 <input type="text" class="form-ctrl" name="autor" id="fAutor" placeholder="Ex: Com amor, Makar ❤️">
             </div>
-            <div style="display:flex; gap:0.75rem; justify-content:flex-end;">
-                <button type="button" class="btn-acao-xs btn-editar-xs" id="btnCancelarForm" style="padding:0.6rem 1.25rem; font-size:0.85rem;">Cancelar</button>
+            <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
+                <button type="button" class="btn-acao-xs btn-editar-xs" id="btnCancelarForm" style="padding:0.6rem 1.25rem;font-size:0.85rem;">Cancelar</button>
                 <button type="submit" style="display:inline-flex;align-items:center;gap:6px;padding:0.7rem 1.75rem;background:linear-gradient(135deg,var(--bordo),var(--bordo-light));color:var(--marfim);border:none;border-radius:var(--radius-pill);font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;">Salvar Carta</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Dados das cartas para JS -->
+<!-- Dados das cartas -->
 <script>
 const cartasData = <%- JSON.stringify(cartas) %>;
 </script>
@@ -605,82 +609,94 @@ const cartasData = <%- JSON.stringify(cartas) %>;
 <script src="/js/main.js"></script>
 <script src="/js/animations.js"></script>
 <script>
-    // ── Sidebar ──────────────────────────────────────
+    /* ── Sidebar ── */
     const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarClose = document.getElementById('sidebarClose');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
-    const openSb = () => { sidebar.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; };
+    const openSb  = () => { sidebar.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; };
     const closeSb = () => { sidebar.classList.remove('active'); sidebarOverlay.classList.remove('active'); document.body.style.overflow = ''; };
-    sidebarToggle.addEventListener('click', openSb);
-    sidebarClose.addEventListener('click', closeSb);
+    document.getElementById('sidebarToggle').addEventListener('click', openSb);
+    document.getElementById('sidebarClose').addEventListener('click', closeSb);
     sidebarOverlay.addEventListener('click', closeSb);
     document.querySelectorAll('.sidebar-menu a').forEach(l => l.addEventListener('click', closeSb));
 
-    // ── Envelope 3D ──────────────────────────────────
+    /* ─────────────────────────────────────────────
+       LÓGICA DO ENVELOPE
+    ───────────────────────────────────────────── */
     let envelopeAtivo = null;
 
-    function abrirEnvelope(id) {
+    function clickEnvelope(id) {
         const env = document.getElementById(`env-${id}`);
         if (!env) return;
 
-        // Se este envelope já está aberto, abrir o modal diretamente
+        // Se já está aberto, apenas exibir a carta
         if (env.classList.contains('aberto')) {
-            abrirModal(id);
+            exibirCartaFullscreen(id);
             return;
         }
 
-        // Fechar qualquer outro envelope aberto
-        if (envelopeAtivo && envelopeAtivo !== env) {
-            envelopeAtivo.classList.remove('aberto');
+        // Fechar outro envelope aberto se existir
+        if (envelopeAtivo) {
+            envelopeAtivo.classList.remove('abrindo', 'aberto');
         }
         envelopeAtivo = env;
 
-        // Abrir o envelope com animação
-        env.classList.add('aberto');
+        // Fase 1: animar abertura do envelope
+        env.classList.add('abrindo');
 
-        // Após a animação, abrir o modal
-        setTimeout(() => abrirModal(id), 900);
+        // Fase 2: após a aba abrir + papel subir, marcar como aberto e mostrar carta
+        setTimeout(() => {
+            env.classList.add('aberto');
+            exibirCartaFullscreen(id);
+        }, 1050);
     }
 
-    function abrirModal(id) {
-        const c = cartasData.find(x => x.id === id);
-        if (!c) return;
-        document.getElementById('papelData').textContent = c.data || '';
-        document.getElementById('papelTitulo').textContent = c.titulo;
-        document.getElementById('papelCorpo').textContent = c.conteudo || '';
-        document.getElementById('papelAssinar').textContent = c.autor ? `— ${c.autor}` : '';
+    function exibirCartaFullscreen(id) {
+        const carta = cartasData.find(c => c.id === id);
+        if (!carta) return;
 
-        const modalLeitura = document.getElementById('modalLeitura');
-        modalLeitura.classList.add('show');
+        // Preencher conteúdo
+        document.getElementById('papelData').textContent    = carta.data    || '';
+        document.getElementById('papelTitulo').textContent  = carta.titulo;
+        document.getElementById('papelCorpo').textContent   = carta.conteudo || '';
+        document.getElementById('papelAssinar').textContent = carta.autor ? `— ${carta.autor}` : '';
+
+        // Mostrar fullscreen
+        const fs = document.getElementById('cartaFullscreen');
+        fs.classList.add('show');
         document.body.style.overflow = 'hidden';
 
-        if (window.lancarConfetesComemorativos) setTimeout(window.lancarConfetesComemorativos, 400);
+        // Confete especial depois de um momento
+        if (window.lancarConfetesComemorativos) setTimeout(window.lancarConfetesComemorativos, 600);
     }
 
-    function fecharModal() {
-        const modalLeitura = document.getElementById('modalLeitura');
-        modalLeitura.classList.remove('show');
+    function fecharCarta() {
+        const fs = document.getElementById('cartaFullscreen');
+        fs.classList.remove('show');
         document.body.style.overflow = '';
 
-        // Fechar o envelope quando fechar o modal
+        // Fechar o envelope também
         if (envelopeAtivo) {
             setTimeout(() => {
-                envelopeAtivo.classList.remove('aberto');
+                envelopeAtivo.classList.remove('abrindo', 'aberto');
                 envelopeAtivo = null;
-            }, 200);
+            }, 300);
         }
     }
 
-    document.getElementById('btnFecharPapel').addEventListener('click', fecharModal);
-    document.getElementById('modalLeitura').addEventListener('click', e => {
-        if (e.target === document.getElementById('modalLeitura')) fecharModal();
-    });
+    function fecharCartaFullscreen(event) {
+        // Fechar apenas se clicou no backdrop (fora do papel)
+        if (event.target === document.getElementById('cartaFullscreen')) {
+            fecharCarta();
+        }
+    }
 
-    // ── Modal formulário ─────────────────────────────
-    const modalForm = document.getElementById('modalFormCarta');
-    const formCarta = document.getElementById('formCarta');
-    const btnFab = document.getElementById('btnFab');
+    // Tecla ESC fecha
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharCarta(); });
+
+    /* ── Modal Formulário ── */
+    const modalForm  = document.getElementById('modalFormCarta');
+    const formCarta  = document.getElementById('formCarta');
+    const btnFab     = document.getElementById('btnFab');
     const btnCancelar = document.getElementById('btnCancelarForm');
 
     btnFab.addEventListener('click', () => {
