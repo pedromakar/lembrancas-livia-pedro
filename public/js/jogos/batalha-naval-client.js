@@ -221,10 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
             toast('Posição inválida! Tente outro lugar.'); return;
         }
 
-        // Marca no tabuleiro
-        celulas.forEach(([ll, cc]) => {
+        // Marca no tabuleiro e adiciona o emoji no meio do navio
+        const meio = Math.floor(celulas.length / 2);
+        celulas.forEach(([ll, cc], index) => {
             const el = document.getElementById(`tab-pos-${ll}-${cc}`);
-            if (el) { el.classList.add('navio'); el.dataset.navioId = id; }
+            if (el) { 
+                el.classList.add('navio'); 
+                el.dataset.navioId = id; 
+                if (index === meio) {
+                    el.innerHTML = `<span style="font-size: 1.2rem;">${emoji}</span>`;
+                }
+            }
         });
 
         estado.naviosPosicionados.push({ id, nome, emoji, tamanho, linha: l, coluna: c, horizontal: estado.horizontal });
@@ -423,11 +430,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Renderiza meus navios no tabuleiro da batalha ─
     function renderizarNaviosProprios() {
         estado.naviosPosicionados.forEach(navio => {
+            const meio = Math.floor(navio.tamanho / 2);
             for (let i = 0; i < navio.tamanho; i++) {
                 const l = navio.horizontal ? navio.linha : navio.linha + i;
                 const c = navio.horizontal ? navio.coluna + i : navio.coluna;
                 const el = document.getElementById(`tab-meu-${l}-${c}`);
-                if (el) el.classList.add('navio-proprio');
+                if (el) {
+                    el.classList.add('navio-proprio');
+                    if (i === meio) {
+                        el.innerHTML = `<span style="font-size: 1.2rem; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">${navio.emoji}</span>`;
+                    }
+                }
             }
         });
     }

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚓ Batalha Naval | Nosso Lugar</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Design System do site -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- CSS específico dos jogos -->
+    <link rel="stylesheet" href="/css/jogos.css">
+</head>
+<body class="bn-wrapper">
+
+    <!-- Navbar Completa -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(90deg, #5A1C35, #A35F74) !important; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/" style="font-weight:bold; font-size:1.3rem; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-heart"></i> Nosso Lugar
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i> Início
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cartas">
+                            <i class="fas fa-envelope"></i> Cartas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-highlight" href="/jogos" style="background: rgba(255, 255, 255, 0.25); border-radius: 20px; padding: 5px 15px !important; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.4); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                            <i class="fas fa-gamepad"></i> 🎮 Jogos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/lembrancas">
+                            <i class="fas fa-images"></i> Lembranças
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/historia">
+                            <i class="fas fa-book-heart"></i> História
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/playlist">
+                            <i class="fas fa-music"></i> Playlist
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/lugares">
+                            <i class="fas fa-map-marker-alt"></i> Lugares
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/estatisticas">
+                            <i class="fas fa-chart-pie"></i> Estatísticas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast de mensagens -->
+    <div class="bn-toast" id="bn-toast"></div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- FASE 1 — LOBBY (Local)                       -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="fase ativa" id="fase-lobby">
+        <div class="bn-lobby">
+            <div style="font-size:4rem; margin-bottom:1rem; animation: float 3s ease-in-out infinite;">⚓</div>
+            <h1>Batalha Naval</h1>
+            <p class="subtitulo">
+                Modo Local (Mesmo Dispositivo) 📱<br>
+                <small>Passem o celular na vez de cada um!</small>
+            </p>
+
+            <div class="bn-card">
+                <h3>👥 Quem vai jogar?</h3>
+                <input type="text" id="input-p1" class="input-jogo" placeholder="Jogador 1 (Ex: Pedro)" maxlength="20" style="margin-bottom:1rem;">
+                <input type="text" id="input-p2" class="input-jogo" placeholder="Jogador 2 (Ex: Lívia)" maxlength="20">
+                
+                <button id="btn-iniciar-setup" class="btn-jogo btn-jogo-primario w-100" style="margin-top:1.5rem;">
+                    🎯 Começar Jogo
+                </button>
+            </div>
+            
+            <a href="/jogos/batalha-naval" style="color: var(--bordo); text-decoration: underline; font-size: 0.9rem;">
+                Voltar para o Modo Online
+            </a>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- FASE: TRANSIÇÃO / TELA CEGA                   -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="fase" id="fase-blindfold">
+        <div class="bn-lobby">
+            <div style="font-size:4rem; margin-bottom:1rem;">🙈</div>
+            <h1 id="blindfold-titulo" style="font-size:2rem; margin-bottom:0.5rem;">Vez do Pedro!</h1>
+            <p class="subtitulo" style="font-size:1.2rem; color: #dc3545; font-weight:bold;">
+                Lívia, feche os olhos ou vire de costas! 👀
+            </p>
+            <p style="color: var(--cor-gray); font-size: 0.9rem; margin-bottom:2rem;">
+                Passe o celular para o(a) jogador(a) da vez.
+            </p>
+
+            <div class="bn-card">
+                <button id="btn-estou-com-celular" class="btn-jogo btn-jogo-primario w-100">
+                    Estou com o celular! ✅
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- FASE 3 — POSICIONAMENTO                       -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="fase" id="fase-posicionamento">
+        <div class="bn-posicionamento">
+            <h2>⚓ Posicione seus Navios</h2>
+            <p style="text-align:center; color:var(--cor-gray); margin-bottom:1rem;">
+                Selecione um navio e clique no tabuleiro para posicioná-lo
+            </p>
+
+            <div class="posic-layout">
+                <!-- Tabuleiro -->
+                <div class="tabuleiro-container">
+                    <div class="tabuleiro-label">Meu Campo</div>
+                    <div id="tab-pos" class="tabuleiro"></div>
+
+                    <!-- Controles -->
+                    <div class="posic-controles" style="margin-top:1rem;">
+                        <button id="btn-rotacionar" class="btn-rotacionar">↔️ Horizontal</button>
+                        <button id="btn-aleatorio" class="btn-jogo btn-jogo-secundario">
+                            🎲 Aleatório
+                        </button>
+                        <button id="btn-confirmar-posicao" class="btn-jogo btn-jogo-primario" disabled>
+                            ✅ Confirmar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Painel de Navios -->
+                <div class="navios-panel">
+                    <h4>🚢 Seus Navios</h4>
+                    <div id="navios-lista"></div>
+                    <p style="font-size:0.72rem; color:var(--cor-gray); margin-top:0.8rem; line-height:1.5;">
+                        Clique num navio, depois clique no tabuleiro para posicioná-lo.
+                        Use o botão ↔️ para rotacionar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- FASE 4 — BATALHA                              -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="fase" id="fase-batalha">
+        <div class="bn-batalha">
+
+            <!-- Header com turno -->
+            <div class="batalha-header">
+                <div class="turno-indicator">
+                    <div class="turno-dot" id="turno-dot"></div>
+                    <span id="turno-texto">Carregando...</span>
+                </div>
+                <div style="display:flex; gap:1rem; font-size:0.8rem; color:var(--cor-gray);">
+                    <span>💕 Nosso Lugar — Batalha Naval</span>
+                </div>
+            </div>
+
+            <!-- Dois campos lado a lado -->
+            <div class="batalha-campos">
+                <!-- Meu campo -->
+                <div class="campo-wrapper">
+                    <div class="campo-titulo" id="campo-meu-label">Meu Campo</div>
+                    <div id="tab-meu" class="tabuleiro"></div>
+
+                    <!-- Navios próprios afundados -->
+                    <div style="margin-top:0.5rem;">
+                        <p style="font-size:0.7rem; color:var(--cor-gray); margin-bottom:0.3rem;">Perdidos:</p>
+                        <div class="navios-afundados" id="navios-afundados-eu"></div>
+                    </div>
+                </div>
+
+                <!-- Campo adversário -->
+                <div class="campo-wrapper" id="campo-inimigo">
+                    <div class="campo-titulo" id="campo-adv-label">Campo do Adversário</div>
+                    <div id="tab-ataque" class="tabuleiro campo-inimigo"></div>
+
+                    <!-- Navios adversário afundados -->
+                    <div style="margin-top:0.5rem;">
+                        <p style="font-size:0.7rem; color:var(--cor-gray); margin-bottom:0.3rem;">Afundados:</p>
+                        <div class="navios-afundados" id="navios-afundados-adv"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Log de jogadas -->
+            <div class="log-jogadas">
+                <h5>📋 Log de Jogadas</h5>
+                <div id="log-jogadas">
+                    <div class="log-entrada">A batalha começa agora! Boa sorte! ⚓</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- FASE 5 — VITÓRIA / DERROTA                    -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="fase" id="fase-vitoria">
+        <div class="bn-vitoria">
+            <span class="vitoria-emoji" id="vitoria-emoji">🏆</span>
+            <h1 id="vitoria-titulo">Você Ganhou!</h1>
+            <p class="vitoria-sub" id="vitoria-sub"></p>
+
+            <div class="vitoria-stats">
+                <div class="vitoria-stat-item">
+                    <span class="val" id="vitoria-duracao">—</span>
+                    <span class="lbl">Duração</span>
+                </div>
+                <div class="vitoria-stat-item">
+                    <span class="val" id="vitoria-sequencia">—</span>
+                    <span class="lbl">Melhor Sequência</span>
+                </div>
+                <div class="vitoria-stat-item">
+                    <span class="val">
+                        <span id="vitoria-placar-pedro">0</span>×<span id="vitoria-placar-livia">0</span>
+                    </span>
+                    <span class="lbl">Placar Geral</span>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+                <button id="btn-jogar-de-novo" class="btn-jogo btn-jogo-primario">
+                    🔄 Jogar de Novo
+                </button>
+                <button id="btn-voltar-jogos" class="btn-jogo btn-jogo-secundario">
+                    🎮 Voltar aos Jogos
+                </button>
+            </div>
+
+            <!-- Placar detalhado -->
+            <div class="bn-card" style="margin-top:2rem; background: linear-gradient(135deg,#5A1C35,#7a2d46); color:white; border:none;">
+                <h3 style="color:rgba(255,255,255,0.9); font-size:1rem;">💕 Placar do Casal — Batalha Naval</h3>
+                <div style="display:flex; justify-content:space-around; margin-top:1rem; gap:1rem; flex-wrap:wrap;">
+                    <div style="text-align:center;">
+                        <div style="font-size:2.5rem; font-weight:700;" id="plac-pedro2"><%= resumo.vitoriasPedro %></div>
+                        <div style="font-size:0.8rem; opacity:0.8;">Pedro</div>
+                    </div>
+                    <div style="font-size:1.5rem; display:flex; align-items:center;">VS</div>
+                    <div style="text-align:center;">
+                        <div style="font-size:2.5rem; font-weight:700;" id="plac-livia2"><%= resumo.vitoriasLivia %></div>
+                        <div style="font-size:0.8rem; opacity:0.8;">Lívia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Módulo de áudio -->
+    <script src="/js/jogos/audio.js"></script>
+    <!-- Lógica do jogo (Local / Hotseat) -->
+    <script src="/js/jogos/batalha-naval-local.js"></script>
+</body>
+</html>
