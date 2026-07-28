@@ -116,19 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
         container.className = 'tabuleiro';
 
         const letras = ['A','B','C','D','E','F','G','H','I','J'];
-        const numeros = ['1','2','3','4','5','6','7','8','9','10'];
-
-        // Célula vazia no canto
-        const canto = document.createElement('div');
-        container.appendChild(canto);
-
-        // Headers de colunas (números)
-        numeros.forEach(n => {
-            const h = document.createElement('div');
-            h.className = 'tab-header';
-            h.textContent = n;
-            container.appendChild(h);
-        });
+        
+        const corner = document.createElement('div');
+        corner.style.gridRow = '1'; corner.style.gridColumn = '1';
+        container.appendChild(corner);
+        
+        for(let i=1; i<=10; i++) { 
+            const h = document.createElement('div'); h.className='tab-header'; h.textContent=i; 
+            h.style.gridRow = '1'; h.style.gridColumn = `${i+1}`;
+            container.appendChild(h); 
+        }
 
         // Linhas
         for (let l = 0; l < 10; l++) {
@@ -136,15 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const lh = document.createElement('div');
             lh.className = 'tab-header';
             lh.textContent = letras[l];
+            lh.style.gridRow = `${l+2}`; lh.style.gridColumn = '1';
             container.appendChild(lh);
 
             // Células
             for (let c = 0; c < 10; c++) {
                 const cel = document.createElement('div');
                 cel.className = 'tab-celula';
-                cel.dataset.l = l;
-                cel.dataset.c = c;
                 cel.id = `${idContainer}-${l}-${c}`;
+                cel.style.gridRow = `${l+2}`; cel.style.gridColumn = `${c+2}`;
 
                 if (clicavel) {
                     cel.addEventListener('click',   () => handleCliqueAtaque(l, c));
@@ -162,29 +159,27 @@ document.addEventListener('DOMContentLoaded', () => {
         container.className = 'tabuleiro';
 
         const letras = ['A','B','C','D','E','F','G','H','I','J'];
-        const numeros = ['1','2','3','4','5','6','7','8','9','10'];
-
-        const canto = document.createElement('div');
-        container.appendChild(canto);
-        numeros.forEach(n => {
-            const h = document.createElement('div');
-            h.className = 'tab-header';
-            h.textContent = n;
-            container.appendChild(h);
-        });
-
+        
+        const corner = document.createElement('div');
+        corner.style.gridRow = '1'; corner.style.gridColumn = '1';
+        container.appendChild(corner);
+        
+        for(let i=1; i<=10; i++) { 
+            const h = document.createElement('div'); h.className='tab-header'; h.textContent=i; 
+            h.style.gridRow = '1'; h.style.gridColumn = `${i+1}`;
+            container.appendChild(h); 
+        }
+        
         for (let l = 0; l < 10; l++) {
-            const lh = document.createElement('div');
-            lh.className = 'tab-header';
-            lh.textContent = letras[l];
+            const lh = document.createElement('div'); lh.className = 'tab-header'; lh.textContent = letras[l]; 
+            lh.style.gridRow = `${l+2}`; lh.style.gridColumn = '1';
             container.appendChild(lh);
-
+            
             for (let c = 0; c < 10; c++) {
                 const cel = document.createElement('div');
                 cel.className = 'tab-celula';
-                cel.dataset.l = l;
-                cel.dataset.c = c;
                 cel.id = `tab-pos-${l}-${c}`;
+                cel.style.gridRow = `${l+2}`; cel.style.gridColumn = `${c+2}`;
                 cel.addEventListener('click',      () => handleCliquePosicionar(l, c));
                 cel.addEventListener('mouseenter', () => handleHoverPosicionar(l, c));
                 cel.addEventListener('mouseleave', () => limparPreview());

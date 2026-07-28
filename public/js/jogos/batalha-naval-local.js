@@ -143,15 +143,27 @@ document.addEventListener('DOMContentLoaded', () => {
         container.className = 'tabuleiro';
         
         const letras = ['A','B','C','D','E','F','G','H','I','J'];
-        container.appendChild(document.createElement('div'));
-        for(let i=1; i<=10; i++) { const h=document.createElement('div'); h.className='tab-header'; h.textContent=i; container.appendChild(h); }
+        
+        const corner = document.createElement('div');
+        corner.style.gridRow = '1'; corner.style.gridColumn = '1';
+        container.appendChild(corner);
+        
+        for(let i=1; i<=10; i++) { 
+            const h = document.createElement('div'); h.className='tab-header'; h.textContent=i; 
+            h.style.gridRow = '1'; h.style.gridColumn = `${i+1}`;
+            container.appendChild(h); 
+        }
         
         for (let l = 0; l < 10; l++) {
-            const lh = document.createElement('div'); lh.className = 'tab-header'; lh.textContent = letras[l]; container.appendChild(lh);
+            const lh = document.createElement('div'); lh.className = 'tab-header'; lh.textContent = letras[l]; 
+            lh.style.gridRow = `${l+2}`; lh.style.gridColumn = '1';
+            container.appendChild(lh);
+            
             for (let c = 0; c < 10; c++) {
                 const cel = document.createElement('div');
                 cel.className = 'tab-celula';
                 cel.id = `tab-pos-${l}-${c}`;
+                cel.style.gridRow = `${l+2}`; cel.style.gridColumn = `${c+2}`;
                 cel.addEventListener('mouseenter', () => hoverPos(l, c));
                 cel.addEventListener('mouseleave', limparPreview);
                 cel.addEventListener('click', () => clickPos(l, c));
@@ -255,79 +267,75 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ambos prontos, começar batalha
             estado.turno = 1;
             estado.inicioBatalhaTempo = Date.now();
-            iniciarFaseCega(estado.p1.nome, estado.p2.nome, iniciarTurnoBatalha);
+            iniciarBatalhaLocal();
         }
     });
 
     // ── Batalha ───────────────────────────────────────
-    function criarGridBatalha(containerId, isAtaque) {
+    function criarGridBatalha(containerId, isAtaque, atiradorId) {
         const container = document.getElementById(containerId);
         container.innerHTML = '';
         container.className = 'tabuleiro' + (isAtaque ? ' campo-inimigo' : '');
         
         const letras = ['A','B','C','D','E','F','G','H','I','J'];
-        container.appendChild(document.createElement('div'));
-        for(let i=1; i<=10; i++) { const h=document.createElement('div'); h.className='tab-header'; h.textContent=i; container.appendChild(h); }
+        
+        const corner = document.createElement('div');
+        corner.style.gridRow = '1'; corner.style.gridColumn = '1';
+        container.appendChild(corner);
+        
+        for(let i=1; i<=10; i++) { 
+            const h = document.createElement('div'); h.className='tab-header'; h.textContent=i; 
+            h.style.gridRow = '1'; h.style.gridColumn = `${i+1}`;
+            container.appendChild(h); 
+        }
         
         for (let l = 0; l < 10; l++) {
-            const lh = document.createElement('div'); lh.className = 'tab-header'; lh.textContent = letras[l]; container.appendChild(lh);
+            const lh = document.createElement('div'); lh.className = 'tab-header'; lh.textContent = letras[l]; 
+            lh.style.gridRow = `${l+2}`; lh.style.gridColumn = '1';
+            container.appendChild(lh);
             for (let c = 0; c < 10; c++) {
                 const cel = document.createElement('div');
                 cel.className = 'tab-celula';
                 cel.id = `${containerId}-${l}-${c}`;
+                cel.style.gridRow = `${l+2}`; cel.style.gridColumn = `${c+2}`;
                 
                 if (isAtaque) {
-                    cel.addEventListener('mouseenter', () => cel.classList.add('alvo-mira'));
+                    cel.addEventListener('mouseenter', () => { if(estado.turno === atiradorId) cel.classList.add('alvo-mira'); });
                     cel.addEventListener('mouseleave', () => cel.classList.remove('alvo-mira'));
-                    cel.addEventListener('click', () => atirar(l, c));
+                    cel.addEventListener('click', () => atirar(l, c, atiradorId, containerId));
                 }
                 container.appendChild(cel);
             }
         }
     }
 
-    function renderizarTabuleiroProprio() {
-        const jAtual = getJogadorAtual();
-        criarGridBatalha('tab-meu', false);
-        document.getElementById('campo-meu-label').textContent = `Seu Campo (${jAtual.nome})`;
-        
-        jAtual.navios.forEach(navio => {
-            adicionarOverlayNavio('tab-meu', navio);
-            const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
-            cells.forEach(([ll, cc]) => {
-                const el = document.getElementById(`tab-meu-${ll}-${cc}`);
-                // Se foi atingido pelo inimigo
-                if (jAtual.tab[ll][cc].atingido) {
-                    el.classList.add('acerto');
-                    el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💥</div>';
-                }
-            });
-        });
-        
-        // Pinta águas erradas pelo inimigo no meu tabuleiro
-        for (let l = 0; l < 10; l++) {
-            for (let c = 0; c < 10; c++) {
-                if (jAtual.tab[l][c].atingido && !jAtual.tab[l][c].navio) {
-                    const el = document.getElementById(`tab-meu-${l}-${c}`);
-                    el.classList.add('erro');
-                    el.innerHTML = '<div class="celula-icon">💧</div>';
-                }
-            }
-        }
-    }
+    function renderizarAmbosTabuleiros() {
+        // Campo de Player 1 (Player 2 ataca aqui)
+        document.getElementById('campo-meu-label').textContent = `Campo de ${estado.p1.nome}`;
+        criarGridBatalha('tab-meu', true, 2); 
 
-    function renderizarTabuleiroAtaque() {
-        const adv = getAdversario();
-        criarGridBatalha('tab-ataque', true);
-        document.getElementById('campo-adv-label').textContent = `Campo de ${adv.nome}`;
+        // Campo de Player 2 (Player 1 ataca aqui)
+        document.getElementById('campo-adv-label').textContent = `Campo de ${estado.p2.nome}`;
+        criarGridBatalha('tab-ataque', true, 1);
         
-        // Pinta os tiros que eu já dei
         for (let l = 0; l < 10; l++) {
             for (let c = 0; c < 10; c++) {
-                if (adv.tab[l][c].atingido) {
+                // P1
+                if (estado.p1.tab[l][c].atingido) {
+                    const el = document.getElementById(`tab-meu-${l}-${c}`);
+                    if (estado.p1.tab[l][c].navio) {
+                        el.classList.add('acerto');
+                        el.innerHTML = '<div class="celula-icon">💥</div>';
+                    } else {
+                        el.classList.add('erro');
+                        el.innerHTML = '<div class="celula-icon">💧</div>';
+                    }
+                }
+                // P2
+                if (estado.p2.tab[l][c].atingido) {
                     const el = document.getElementById(`tab-ataque-${l}-${c}`);
-                    if (adv.tab[l][c].navio) {
-                        el.classList.add('acerto'); // depois melhora se afundou
+                    if (estado.p2.tab[l][c].navio) {
+                        el.classList.add('acerto');
                         el.innerHTML = '<div class="celula-icon">💥</div>';
                     } else {
                         el.classList.add('erro');
@@ -337,53 +345,64 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Coloca caveira nos navios afundados
-        adv.naviosAfundados.forEach(navio => {
+        // Caveiras P1
+        estado.p1.naviosAfundados.forEach(navio => {
+            adicionarOverlayNavio('tab-meu', navio);
+            const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
+            cells.forEach(([ll, cc]) => {
+                const el = document.getElementById(`tab-meu-${ll}-${cc}`);
+                el.classList.remove('acerto');
+                el.classList.add('afundado');
+                el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+            });
+        });
+
+        // Caveiras P2
+        estado.p2.naviosAfundados.forEach(navio => {
+            adicionarOverlayNavio('tab-ataque', navio);
             const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
             cells.forEach(([ll, cc]) => {
                 const el = document.getElementById(`tab-ataque-${ll}-${cc}`);
                 el.classList.remove('acerto');
                 el.classList.add('afundado');
-                el.innerHTML = '<div class="celula-icon">💀</div>';
+                el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
             });
         });
     }
 
     function atualizarPainelAfundados() {
-        const jAtual = getJogadorAtual();
-        const adv = getAdversario();
-        
         const myCont = document.getElementById('navios-afundados-eu');
         myCont.innerHTML = '';
-        jAtual.naviosAfundados.forEach(n => myCont.innerHTML += `<span class="navio-afundado-badge">${n.icone} ${n.nome}</span>`);
+        estado.p1.naviosAfundados.forEach(n => myCont.innerHTML += `<span class="navio-afundado-badge">${n.icone} ${n.nome}</span>`);
         
         const advCont = document.getElementById('navios-afundados-adv');
         advCont.innerHTML = '';
-        adv.naviosAfundados.forEach(n => advCont.innerHTML += `<span class="navio-afundado-badge">${n.icone} ${n.nome}</span>`);
+        estado.p2.naviosAfundados.forEach(n => advCont.innerHTML += `<span class="navio-afundado-badge">${n.icone} ${n.nome}</span>`);
     }
 
-    function iniciarTurnoBatalha() {
+    function iniciarBatalhaLocal() {
         const jAtual = getJogadorAtual();
-        
-        document.getElementById('turno-texto').textContent = `Turno de ${jAtual.nome}`;
-        renderizarTabuleiroProprio();
-        renderizarTabuleiroAtaque();
+        document.getElementById('turno-texto').textContent = `Vez de ${jAtual.nome}`;
+        renderizarAmbosTabuleiros();
         atualizarPainelAfundados();
-        
         mostrarFase('fase-batalha');
     }
 
-    function atirar(l, c) {
-        const adv = getAdversario();
+    function atirar(l, c, atiradorId, containerId) {
+        if (estado.turno !== atiradorId) {
+            return toast(`Calma! É a vez de ${getJogadorAtual().nome}!`);
+        }
+        
+        const adv = atiradorId === 1 ? estado.p2 : estado.p1;
+        const jAtual = atiradorId === 1 ? estado.p1 : estado.p2;
         const celula = adv.tab[l][c];
         
         if (celula.atingido) return toast('Você já atirou aí! 🎯');
         
         // Marca como atingido
         celula.atingido = true;
-        const jAtual = getJogadorAtual();
         const coord = `${['A','B','C','D','E','F','G','H','I','J'][l]}${c+1}`;
-        const el = document.getElementById(`tab-ataque-${l}-${c}`);
+        const el = document.getElementById(`${containerId}-${l}-${c}`);
         
         if (celula.navio) {
             // Acertou um navio
@@ -406,14 +425,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 toast(msgsAfundado[Math.floor(Math.random()*msgsAfundado.length)], 4000);
                 
                 // Adiciona o overlay do navio afundado
-                adicionarOverlayNavio('tab-ataque', navioCfg);
+                adicionarOverlayNavio(containerId, navioCfg);
                 
                 // Caveira em todas as partes do navio por cima do overlay
                 cellsNavio.forEach(([ll, cc]) => {
-                    const e = document.getElementById(`tab-ataque-${ll}-${cc}`);
+                    const e = document.getElementById(`${containerId}-${ll}-${cc}`);
                     e.classList.add('afundado');
                     e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
                 });
+                
+                atualizarPainelAfundados();
                 
                 // Checa vitória
                 if (adv.naviosAfundados.length === totalNavios) {
@@ -436,13 +457,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         atualizarPainelAfundados();
         
-        // Passar turno após 2 segundos
         setTimeout(() => {
             estado.turno = estado.turno === 1 ? 2 : 1;
-            const pxAtivo = getJogadorAtual();
-            const pxEspiando = getAdversario();
-            iniciarFaseCega(pxAtivo.nome, pxEspiando.nome, iniciarTurnoBatalha);
-        }, 2500);
+            const proxJog = getJogadorAtual();
+            document.getElementById('turno-texto').textContent = `Vez de ${proxJog.nome}`;
+            toast(`Vez de ${proxJog.nome}!`, 3000);
+        }, 1500);
     }
 
     function finalizarJogo(vencedor, perdedor) {
