@@ -389,6 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function atirar(l, c, atiradorId, containerId) {
+        if (estado.bloqueado) return;
         if (estado.turno !== atiradorId) {
             return toast(`Calma! É a vez de ${getJogadorAtual().nome}!`);
         }
@@ -398,6 +399,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const celula = adv.tab[l][c];
         
         if (celula.atingido) return toast('Você já atirou aí! 🎯');
+        
+        estado.bloqueado = true;
         
         // Marca como atingido
         celula.atingido = true;
@@ -459,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setTimeout(() => {
             estado.turno = estado.turno === 1 ? 2 : 1;
+            estado.bloqueado = false;
             const proxJog = getJogadorAtual();
             document.getElementById('turno-texto').textContent = `Vez de ${proxJog.nome}`;
             toast(`Vez de ${proxJog.nome}!`, 3000);
