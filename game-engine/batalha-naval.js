@@ -151,7 +151,7 @@ function inicializar(io) {
             });
 
             sala.estado = 'posicionando';
-            io.to(codigo).emit('batalha:fase-posicionamento', { naviosConfig: NAVIOS_CONFIG });
+            io.to(codigo).emit('batalha:fase-posicionamento', { codigo, naviosConfig: NAVIOS_CONFIG });
             console.log(`[Jogos] ${nomeJogador} entrou na sala ${codigo}`);
         });
 

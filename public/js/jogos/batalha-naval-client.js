@@ -542,9 +542,9 @@ document.addEventListener('DOMContentLoaded', () => {
         toast(`${adversario?.nome || 'Adversário'} entrou na sala! Vamos jogar? 💕`, 3000);
     });
 
-    socket.on('batalha:fase-posicionamento', ({ naviosConfig }) => {
+    socket.on('batalha:fase-posicionamento', ({ codigo, naviosConfig }) => {
         estado.naviosConfig = naviosConfig;
-        estado.sala = estado.sala || '';
+        estado.sala = codigo;
 
         // Renderiza sidebar de navios
         const painel = document.getElementById('navios-lista');
