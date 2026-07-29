@@ -128,8 +128,6 @@ function initSplashScreen() {
 // ─────────────────────────────────────────────
 function initContadorPremium(dataInicioStr) {
     const contadores = {
-        anos:     document.getElementById('contador-anos'),
-        meses:    document.getElementById('contador-meses'),
         dias:     document.getElementById('contador-dias'),
         horas:    document.getElementById('contador-horas'),
         minutos:  document.getElementById('contador-minutos'),
@@ -152,11 +150,8 @@ function initContadorPremium(dataInicioStr) {
         const totalHoras    = Math.floor(totalMinutos / 60);
         const totalDias     = Math.floor(totalHoras / 24);
 
-        const anos    = Math.floor(totalDias / 365);
-        const meses   = Math.floor((totalDias % 365) / 30);
-        const dias    = Math.floor((totalDias % 365) % 30);
-        const horas   = totalHoras % 24;
-        const minutos = totalMinutos % 60;
+        const horas    = totalHoras % 24;
+        const minutos  = totalMinutos % 60;
         const segundos = totalSegundos % 60;
 
         function setVal(el, val) {
@@ -171,9 +166,7 @@ function initContadorPremium(dataInicioStr) {
             }
         }
 
-        setVal(contadores.anos,     anos);
-        setVal(contadores.meses,    meses);
-        setVal(contadores.dias,     dias);
+        setVal(contadores.dias,     totalDias);
         setVal(contadores.horas,    horas);
         setVal(contadores.minutos,  minutos);
         setVal(contadores.segundos, segundos);
