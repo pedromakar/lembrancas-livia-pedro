@@ -372,23 +372,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         if(e){
                             e.classList.remove('acerto');
                             e.classList.add('afundado');
-                            e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                            e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;"><i class="fas fa-gem" style="color:#ffd700;font-size:0.85rem;"></i></div>';
                         }
                     }
                     AudioJogo.afundado();
                     toast(msgAleatoria(mensagensAfundado), 3500);
-                    addLog(`${estado.meuNome}: afundou o ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');
+                    addLog(`${estado.meuNome}: descobriu o ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');
                     adicionarNavioAfundadoAdversario(navioAfundado);
                     voeCoracao(window.innerWidth / 2, window.innerHeight / 2);
                 } else if (acertou) {
                     el.classList.add('acerto');
-                    icon.textContent = '💥';
+                    icon.innerHTML = '<i class="fas fa-heart" style="color:var(--bordo,#5A1C35);"></i>';
                     AudioJogo.acerto();
                     toast(msgAleatoria(mensagensAcerto), 2500);
                     addLog(`${estado.meuNome}: ACERTOU em ${coordStr(linha, coluna)}!`, 'acerto-log');
                 } else {
                     el.classList.add('erro');
-                    icon.textContent = '💧';
+                    icon.innerHTML = '<span class="font-script" style="color:var(--color-muted,#7A6B63);font-size:1.1rem;opacity:0.65;">✕</span>';
                     AudioJogo.erro();
                     toast(msgAleatoria(mensagensErro), 2500);
                     addLog(`${estado.meuNome}: errou em ${coordStr(linha, coluna)}.`);
@@ -405,14 +405,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     return d;
                 })();
                 if (navioAfundado) {
-                    // Atualiza todas as células do meu navio para 💀
+                    // Atualiza todas as células do meu navio
                     for(let i=0; i<navioAfundado.tamanho; i++){
                         const ll = navioAfundado.horizontal ? navioAfundado.linha : navioAfundado.linha + i;
                         const cc = navioAfundado.horizontal ? navioAfundado.coluna + i : navioAfundado.coluna;
                         const e = document.getElementById(`tab-meu-${ll}-${cc}`);
                         if(e){
                             e.classList.add('acerto');
-                            e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                            e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;"><i class="fas fa-gem" style="color:#ffd700;font-size:0.85rem;"></i></div>';
                         }
                     }
                     addLog(`${estado.adversarioNome}: afundou seu ${navioAfundado.icone} ${navioAfundado.nome}!`, 'afundado-log');

@@ -283,64 +283,97 @@
     display: grid;
     grid-template-columns: 28px repeat(10, 1fr);
     grid-template-rows: 28px repeat(10, 1fr);
-    gap: 2px;
+    gap: 3px;
     width: 100%;
     aspect-ratio: 11/11;
     user-select: none;
+    background-color: var(--bg-card-alt, #FAF5EE);
+    border: 2px solid var(--color-border, #E8DFD5);
+    border-radius: var(--radius-card, 18px);
+    padding: 12px;
+    box-shadow: var(--shadow-md, 0 8px 32px rgba(90, 28, 53, 0.12));
 }
 
 .tab-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--cor-gray, #76656D);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-muted, #76656D);
+    font-family: var(--font-sans, 'Inter', sans-serif);
 }
 
 .tab-celula {
     border-radius: 4px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
     position: relative;
     aspect-ratio: 1;
-    border: 1px solid rgba(201, 149, 108, 0.2);
-    background: rgba(255, 255, 255, 0.8);
+    border: 1px dashed rgba(90, 28, 53, 0.18) !important; /* Linha pontilhada sépia */
+    background: rgba(255, 255, 255, 0.75);
 }
 
-.tab-celula:hover { background: rgba(201, 149, 108, 0.2); transform: scale(1.05); }
-.tab-celula.navio { background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46); border-color: transparent; }
-.tab-celula.preview { background: rgba(201, 149, 108, 0.4); border-color: var(--rose-gold, #C9956C); }
-.tab-celula.preview-invalido { background: rgba(220, 53, 69, 0.3); border-color: #dc3545; }
+.tab-celula:hover {
+    background: rgba(201, 149, 108, 0.25); /* Destaque Rose Gold suave */
+    transform: scale(1.05);
+}
+
+.tab-celula.navio {
+    background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46);
+    border-color: transparent !important;
+}
+.tab-celula.preview {
+    background: rgba(201, 149, 108, 0.4);
+    border-color: var(--rose-gold, #C9956C) !important;
+}
+.tab-celula.preview-invalido {
+    background: rgba(220, 53, 69, 0.3);
+    border-color: #dc3545 !important;
+}
 
 .navio-overlay {
     background: linear-gradient(135deg, var(--bordo, #5A1C35) 0%, #8c3855 100%);
-    border-radius: 999px; /* Forma de pílula (pill) para parecer um barco */
+    border-radius: 999px; /* Forma de pílula para o barquinho */
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 1.2rem;
     z-index: 5;
-    pointer-events: none; /* Deixa os cliques passarem para as células por baixo */
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 8px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.1);
+    pointer-events: none;
+    box-shadow: inset 0 2px 4px rgba(255,255,255,0.25), 0 4px 10px rgba(90,28,53,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
     transition: all 0.3s ease;
 }
 
-/* Tabuleiro do adversário (ataque) */
+/* Tabuleiro do adversário (ataque) - Skin Warm Editorial */
 .tab-celula.acerto {
-    background: linear-gradient(135deg, #dc2626, #ef4444);
-    border-color: transparent;
-    animation: hitPulse 0.5s ease;
+    background: rgba(90, 28, 53, 0.12) !important;
+    border-color: rgba(90, 28, 53, 0.3) !important;
+    color: var(--bordo, #5A1C35);
+    animation: hitPulse 0.4s ease;
 }
+
 .tab-celula.erro {
-    background: rgba(100, 130, 200, 0.5);
-    border-color: rgba(100, 130, 200, 0.7);
+    background: rgba(0, 0, 0, 0.02) !important;
+    border-color: rgba(90, 28, 53, 0.12) !important;
+    color: var(--color-muted, #7A6B63);
+    font-family: var(--font-script, 'Caveat', cursive);
 }
-.tab-celula.afundado { background: linear-gradient(135deg, #1a0a12, #3d1224); border-color: transparent; }
-.tab-celula.navio-proprio { background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46); }
-.tab-celula.navio-proprio.acerto { background: linear-gradient(135deg, #dc2626, #ef4444); }
+
+.tab-celula.afundado {
+    background: linear-gradient(135deg, #5A1C35, #3d1224) !important;
+    border-color: transparent !important;
+}
+
+.tab-celula.navio-proprio {
+    background: linear-gradient(135deg, var(--bordo, #5A1C35), #7a2d46);
+}
+
+.tab-celula.navio-proprio.acerto {
+    background: rgba(90, 28, 53, 0.25) !important;
+}
 
 .tab-celula .celula-icon {
     position: absolute;
@@ -348,8 +381,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     pointer-events: none;
+    font-family: var(--font-script, 'Caveat', cursive);
 }
 
 @keyframes hitPulse {

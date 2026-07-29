@@ -325,10 +325,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     const el = document.getElementById(`tab-meu-${l}-${c}`);
                     if (estado.p1.tab[l][c].navio) {
                         el.classList.add('acerto');
-                        el.innerHTML = '<div class="celula-icon">💥</div>';
+                        el.innerHTML = '<div class="celula-icon"><i class="fas fa-heart" style="color:var(--bordo,#5A1C35);"></i></div>';
                     } else {
                         el.classList.add('erro');
-                        el.innerHTML = '<div class="celula-icon">💧</div>';
+                        el.innerHTML = '<div class="celula-icon"><span class="font-script" style="color:var(--color-muted,#7A6B63);font-size:1.1rem;opacity:0.65;">✕</span></div>';
                     }
                 }
                 // P2
@@ -336,16 +336,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     const el = document.getElementById(`tab-ataque-${l}-${c}`);
                     if (estado.p2.tab[l][c].navio) {
                         el.classList.add('acerto');
-                        el.innerHTML = '<div class="celula-icon">💥</div>';
+                        el.innerHTML = '<div class="celula-icon"><i class="fas fa-heart" style="color:var(--bordo,#5A1C35);"></i></div>';
                     } else {
                         el.classList.add('erro');
-                        el.innerHTML = '<div class="celula-icon">💧</div>';
+                        el.innerHTML = '<div class="celula-icon"><span class="font-script" style="color:var(--color-muted,#7A6B63);font-size:1.1rem;opacity:0.65;">✕</span></div>';
                     }
                 }
             }
         }
         
-        // Caveiras P1
+        // Revelados P1
         estado.p1.naviosAfundados.forEach(navio => {
             adicionarOverlayNavio('tab-meu', navio);
             const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
@@ -353,11 +353,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById(`tab-meu-${ll}-${cc}`);
                 el.classList.remove('acerto');
                 el.classList.add('afundado');
-                el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;"><i class="fas fa-gem" style="color:#ffd700;font-size:0.85rem;"></i></div>';
             });
         });
 
-        // Caveiras P2
+        // Revelados P2
         estado.p2.naviosAfundados.forEach(navio => {
             adicionarOverlayNavio('tab-ataque', navio);
             const cells = getCelulasNavio(navio.linha, navio.coluna, navio.tamanho, navio.horizontal);
@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById(`tab-ataque-${ll}-${cc}`);
                 el.classList.remove('acerto');
                 el.classList.add('afundado');
-                el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                el.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;"><i class="fas fa-gem" style="color:#ffd700;font-size:0.85rem;"></i></div>';
             });
         });
     }
@@ -411,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Acertou um navio
             AudioJogo.acerto();
             el.classList.add('acerto');
-            el.innerHTML = '<div class="celula-icon">💥</div>';
+            el.innerHTML = '<div class="celula-icon"><i class="fas fa-heart" style="color:var(--bordo,#5A1C35);"></i></div>';
             
             if (estado.sequenciaAtual.jogador !== jAtual.nome) estado.sequenciaAtual = { jogador: jAtual.nome, count: 0 };
             estado.sequenciaAtual.count++;
@@ -424,17 +424,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (afundou) {
                 AudioJogo.afundado();
                 adv.naviosAfundados.push(navioCfg);
-                addLog(`${jAtual.nome} afundou o ${navioCfg.icone} ${navioCfg.nome} de ${adv.nome}!`, 'afundado-log');
+                addLog(`${jAtual.nome} descobriu o ${navioCfg.icone} ${navioCfg.nome} de ${adv.nome}!`, 'afundado-log');
                 toast(msgsAfundado[Math.floor(Math.random()*msgsAfundado.length)], 4000);
                 
                 // Adiciona o overlay do navio afundado
                 adicionarOverlayNavio(containerId, navioCfg);
                 
-                // Caveira em todas as partes do navio por cima do overlay
                 cellsNavio.forEach(([ll, cc]) => {
                     const e = document.getElementById(`${containerId}-${ll}-${cc}`);
                     e.classList.add('afundado');
-                    e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;">💀</div>';
+                    e.innerHTML = '<div class="celula-icon" style="z-index:10; position:relative;"><i class="fas fa-gem" style="color:#ffd700;font-size:0.85rem;"></i></div>';
                 });
                 
                 atualizarPainelAfundados();
@@ -452,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Errou
             AudioJogo.erro();
             el.classList.add('erro');
-            el.innerHTML = '<div class="celula-icon">💧</div>';
+            el.innerHTML = '<div class="celula-icon"><span class="font-script" style="color:var(--color-muted,#7A6B63);font-size:1.1rem;opacity:0.65;">✕</span></div>';
             estado.sequenciaAtual = { jogador: null, count: 0 };
             toast(msgsErro[Math.floor(Math.random()*msgsErro.length)]);
             addLog(`${jAtual.nome} errou em ${coord}.`);
