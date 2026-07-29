@@ -555,7 +555,7 @@
     <% if (lembrancas && lembrancas.length > 0) { %>
         <% lembrancas.forEach(function(l, idx) { %>
 
-        <div class="lembranca-card reveal"
+        <div class="lembranca-card card-polaroid reveal"
              id="lembranca-<%= l.id %>"
              data-titulo="<%= l.titulo.toLowerCase() %>"
              data-descricao="<%= l.descricao.toLowerCase() %>"
@@ -563,12 +563,14 @@
              data-local="<%= (l.local || '').toLowerCase() %>"
              data-favorito="<%= l.favorito ? 'true' : 'false' %>">
 
-            <!-- Foto ou emoji placeholder -->
-            <% if (l.imagem) { %>
-                <img src="<%= l.imagem %>" alt="<%= l.titulo %>" class="lembranca-foto">
-            <% } else { %>
-                <div class="lembranca-foto-placeholder"><%= l.icone || '📸' %></div>
-            <% } %>
+            <!-- Foto ou placeholder -->
+            <div class="polaroid-img-wrapper">
+                <% if (l.imagem) { %>
+                    <img src="<%= l.imagem %>" alt="<%= l.titulo %>" class="lembranca-foto">
+                <% } else { %>
+                    <div class="lembranca-foto-placeholder"><%= l.icone || '📸' %></div>
+                <% } %>
+            </div>
 
             <!-- Corpo -->
             <div class="lembranca-corpo">
@@ -578,7 +580,7 @@
                     <span class="lembranca-local"><i class="fas fa-map-marker-alt" style="font-size: 0.65rem;"></i> <%= l.local %></span>
                     <% } %>
                 </div>
-                <div class="lembranca-titulo"><%= l.titulo %></div>
+                <div class="lembranca-titulo polaroid-caption"><%= l.titulo %></div>
                 <div class="lembranca-descricao" id="desc-<%= l.id %>"><%= l.descricao %></div>
 
                 <!-- Tags -->

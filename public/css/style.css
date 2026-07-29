@@ -5,18 +5,35 @@
    ===================================================== */
 
 /* -------- FONTES -------- */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* -------- TOKENS DE DESIGN -------- */
+/* -------- TOKENS DE DESIGN (WARM EDITORIAL) -------- */
 :root {
-    /* Cores principais */
+    /* Paleta Quente & Afetiva */
+    --bg-main: #FBF8F3;          /* Creme/Marfim aconchegante para fundo */
+    --bg-card: #FFFFFF;          /* Branco tátil para papéis/cards */
+    --bg-card-alt: #FAF5EE;      /* Papel levemente envelhecido/warm */
+    
+    --color-wine: #5A1C35;        /* Vinho Profundo (Ação Primária / Destaques) */
+    --color-wine-hover: #421326;  /* Vinho Escuro Hover */
+    --color-rose: #C9956C;        /* Rose Gold / Bronze Suave (Acentos) */
+    --color-ink: #2C221E;         /* Tinta/Carvão (Texto principal) */
+    --color-muted: #7A6B63;       /* Texto Secundário */
+    --color-border: #E8DFD5;      /* Bordas delicadas em tom creme */
+
+    /* Tríade Tipográfica */
+    --font-serif: 'Cormorant Garamond', Georgia, serif; /* Títulos Poéticos */
+    --font-script: 'Caveat', cursive;                   /* Notas à Mão / Legendas */
+    --font-sans: 'Inter', -apple-system, sans-serif;   /* UI & Controles */
+
+    /* Cores principais (Legado & Compatibilidade) */
     --bordo: #5A1C35;
     --bordo-dark: #3d1224;
     --bordo-light: #7a2d46;
     --rose-gold: #C9956C;
     --rose-gold-light: #dbb08a;
     --rose-gold-dark: #a87850;
-    --marfim: #FDF8F5;
+    --marfim: #FDF8F3;
     --marfim-dark: #f5ede6;
     --dark: #1A0A12;
     --dark-2: #2B1A22;
@@ -24,14 +41,14 @@
     --nude: #BFA7A0;
     --nude-light: #d4c4be;
 
-    /* Aliases semânticos (mantém compatibilidade) */
+    /* Aliases semânticos */
     --cor-principal: var(--bordo);
     --cor-secundaria: #A35F74;
     --cor-terciaria: var(--nude);
     --cor-light: var(--marfim);
     --cor-dark: var(--dark-2);
     --cor-gray: #76656D;
-    --cor-texto: var(--dark-2);
+    --cor-texto: var(--color-ink);
     --cor-card: rgba(255, 255, 255, 0.85);
 
     /* Glassmorphism */
@@ -40,11 +57,12 @@
     --glass-shadow: 0 20px 60px rgba(90, 28, 53, 0.1);
     --glass-blur: blur(16px);
 
-    /* Sombras */
+    /* Sombras Aquecidas */
     --shadow-sm: 0 2px 12px rgba(90, 28, 53, 0.08);
     --shadow-md: 0 8px 32px rgba(90, 28, 53, 0.12);
     --shadow-lg: 0 20px 60px rgba(90, 28, 53, 0.16);
     --shadow-xl: 0 32px 80px rgba(90, 28, 53, 0.22);
+    --shadow-polaroid: 0 12px 28px -4px rgba(90, 28, 53, 0.12), 0 4px 10px -2px rgba(0,0,0,0.03);
 
     /* Transições */
     --transition-fast: 0.2s ease;
@@ -52,6 +70,7 @@
     --transition-slow: 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 
     /* Border radius */
+    --radius-polaroid: 3px;
     --radius-sm: 8px;
     --radius-md: 16px;
     --radius-lg: 24px;
@@ -1065,3 +1084,103 @@ footer strong { color: var(--rose-gold); }
     .contador-container { gap: 0.5rem; }
     .contador-item { min-width: 62px; }
 }
+
+/* -------- SCRIPT & POLAROID SCRAPBOOK -------- */
+.font-script {
+    font-family: var(--font-script), 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: var(--color-wine);
+    line-height: 1.2;
+}
+
+.card-polaroid {
+    position: relative;
+    background: var(--bg-card, #FFFFFF);
+    padding: 14px 14px 22px 14px;
+    border-radius: var(--radius-polaroid, 3px);
+    box-shadow: var(--shadow-polaroid, 0 12px 28px -4px rgba(90, 28, 53, 0.12));
+    border: 1px solid var(--color-border, #E8DFD5);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.35s ease;
+    cursor: pointer;
+}
+
+.card-polaroid:nth-child(odd) { transform: rotate(-1.2deg); }
+.card-polaroid:nth-child(even) { transform: rotate(1.2deg); }
+
+.card-polaroid:hover {
+    transform: translateY(-6px) rotate(0deg) scale(1.02);
+    box-shadow: 0 20px 35px -5px rgba(90, 28, 53, 0.2);
+    z-index: 10;
+}
+
+.card-polaroid .polaroid-img-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background-color: var(--bg-card-alt, #FAF5EE);
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-polaroid .polaroid-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card-polaroid:hover .polaroid-img-wrapper img {
+    transform: scale(1.04);
+}
+
+.card-polaroid .polaroid-caption {
+    margin-top: 14px;
+    text-align: center;
+    font-family: var(--font-script), 'Caveat', cursive;
+    font-size: 1.45rem;
+    color: var(--color-ink, #2C221E);
+    line-height: 1.2;
+}
+
+/* Washi Tape (Fita adesiva translúcida no topo) */
+.card-polaroid::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 20px;
+    background: rgba(240, 230, 215, 0.7);
+    backdrop-filter: blur(2px);
+    border-left: 2px dashed rgba(200, 180, 160, 0.4);
+    border-right: 2px dashed rgba(200, 180, 160, 0.4);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    z-index: 2;
+}
+
+/* Custom Pin do Leaflet estilo Polaroid Circular com Foto */
+.map-polaroid-pin {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    padding: 3px;
+    box-shadow: 0 6px 18px rgba(90, 28, 53, 0.3);
+    border: 2px solid var(--bordo, #5A1C35);
+    transition: transform 0.25s ease;
+    cursor: pointer;
+}
+
+.map-polaroid-pin img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.map-polaroid-pin:hover {
+    transform: scale(1.25);
+    z-index: 999 !important;
+}
+
