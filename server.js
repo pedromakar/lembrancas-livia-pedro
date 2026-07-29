@@ -27,13 +27,18 @@ app.use(session({
 
 // ========== SEGURANÇA — Senha de acesso ao site ==========
 app.use((req, res, next) => {
-  const user = process.env.SITE_USER || 'pedro';
-  const pass = process.env.SITE_PASSWORD || '12345';
+  const usuariosValidos = {
+    'pedro': process.env.SITE_PASSWORD_PEDRO || '12345',
+    'livia': process.env.SITE_PASSWORD_LIVIA || '12345'
+  };
 
   const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
   const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
 
-  if (login && password && login === user && password === pass) {
+  const usuario = login ? login.toLowerCase().trim() : '';
+
+  if (usuario && password && usuariosValidos[usuario] && usuariosValidos[usuario] === password) {
+    req.session.usuarioLogado = usuario;
     return next();
   }
 
